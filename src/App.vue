@@ -1,32 +1,56 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div id="app" class="main-layout">
+    <router-view />
   </div>
 </template>
+<script>
+import { getSystemConfig } from '@/request/system'
+
+export default {
+  data () {
+    return {}
+  },
+  created () {
+    this.getSysConfig()
+    console.log('App created!')
+  },
+  mounted () {
+    const that = this
+    window.addEventListener('resize', function() {
+      return (() => {
+        that.$store.commit('changeScreenWidth', document.body.clientWidth)
+      })()
+    })
+
+    // 禁止缩放
+    // window.onload = function() {
+    //   document.addEventListener('touchstart', function(event) {
+    //     if (event.touches.length > 1) {
+    //       event.preventDefault()
+    //     }
+    //   });
+    //   document.addEventListener('gesturestart', function(event) {
+    //     event.preventDefault()
+    //   })
+    // };
+  },
+  methods: {
+    getSysConfig () {
+      getSystemConfig().then(res => {
+        if (res.code === 0) {
+          localStorage.setItem('systemConfig', JSON.stringify(res.data))
+          this.$store.commit('updateSysConfig', res.data)
+        }
+      })
+    }
+  }
+}
+
+</script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.main-layout {
+  height: 100%;
+  min-width: 1080px;
 }
 </style>
