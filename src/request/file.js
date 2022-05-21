@@ -19,7 +19,7 @@ import { get, post } from './http'
  */
 
 /**
- * 获取文件列表相关接口
+ * 文件操作相关接口
  */
 // 获取文件列表(区分文件路径)
 export const getFileListByPath = (p) => get('/file/list', p)
@@ -77,7 +77,7 @@ export const getShareList = (p) => get('/share/list', p)
 // 获取分享文件列表
 export const getShareFileList = (p) => get('/share/sharefile/list', p)
 // 保存分享文件
-export const saveShareFile = (p) => post('/share/savesharefile', p)
+export const saveShareFile = (p) => post('/share/save', p)
 // 取消文件分享
 export const cancelShareFile = (p, info) => post('/share/cancel', p, true)
 // 清理分享失效文件
@@ -99,10 +99,8 @@ export const batchCopyFile = (p) => post('/file/batchcopy', p)
 export const deleteRecoveryFile = (p) => post('/recycle/delete', p)
 // 回收站文件还原
 export const restoreRecoveryFile = (p) => post('/recycle/restore', p)
+// 清空回收站
 export const clearRecoveryFile = (p) => post('/recycle/clearall', p)
-// 回收站文件批量删除
-export const batchDeleteRecoveryFile = (p) =>
-  post('/recoveryfile/batchdelete', p)
 
 /**
  * 文件公共接口
@@ -111,11 +109,6 @@ export const batchDeleteRecoveryFile = (p) =>
 export const getFilePreview = (p) => get('/filetransfer/preview/document', p)
 // 文件修改
 export const modifyFileContent = (p) => post('/file/update', p)
-
-export const getVideoStream = (p, info) =>
-  get('/filetransfer/preview/video/stream', p, true)
-
-export const getFile = (p) => get('/filetransfer/download', p)
 
 /**
  * office操作接口
@@ -148,7 +141,7 @@ export const getDownloadProgress = (p) => get('/cloud/progress', p)
 
 // 图片工具
 // 文字识别 参数为图片文件
-export const imageOcrByMultipartFile = (p) => post('/image/ocr/file', p)
+export const imageOcrByMultipartFile = (p) => post('/image/ocr/file', p, true)
 // 文字识别 参数为文件id
 export const imageOcr = (p) => get('/image/ocr', p)
 // 获取清理文件列表

@@ -14,7 +14,7 @@
           <div class="el-form-item user-nick-rel-name">
             <label class="el-form-item__label">用户名:</label>
             <div class="el-form-item__content">
-              <span class="userinfo-descript">{{ editForm.userName }}</span
+              <span class="userinfo-descript">{{ editUserInfo.userName }}</span
               >
             </div>
           </div>
@@ -30,7 +30,7 @@
                   maxlength="16"
                   validateevent="true"
                   class="el-input__inner"
-                  v-model="editForm.nickName"
+                  v-model="editUserInfo.nickName"
                 />
 
               </div>
@@ -45,10 +45,10 @@
                   placeholder="你的邮箱"
                   type="text"
                   rows="2"
-                  maxlength="16"
+                  maxlength="30"
                   validateevent="true"
                   class="el-input__inner"
-                  v-model="editForm.email"
+                  v-model="editUserInfo.email"
                 />
 
               </div>
@@ -66,7 +66,7 @@
                   maxlength="16"
                   validateevent="true"
                   class="el-input__inner"
-                  v-model="editForm.phoneNumber"
+                  v-model="editUserInfo.phoneNumber"
                 />
 
               </div>
@@ -82,7 +82,7 @@
                   type="radio"
                   name="sex"
                   class="el-radio-button__orig-radio"
-                  v-model="editForm.sex"
+                  v-model="editUserInfo.sex"
                   value="0"
                 /><span class="el-radio-button__inner">男</span></label
                 >
@@ -91,7 +91,7 @@
                   type="radio"
                   name="sex"
                   class="el-radio-button__orig-radio"
-                  v-model="editForm.sex"
+                  v-model="editUserInfo.sex"
                   value="1"
                 /><span class="el-radio-button__inner">女</span></label
                 >
@@ -100,7 +100,7 @@
                   type="radio"
                   name="sex"
                   class="el-radio-button__orig-radio"
-                  v-model="editForm.sex"
+                  v-model="editUserInfo.sex"
                   value="2"
                 /><span class="el-radio-button__inner">保密</span></label
                 >
@@ -183,7 +183,7 @@ export default {
   data () {
     return {
       userInfo: {},
-      editForm: {
+      editUserInfo: {
         userName: '',
         nickName: '',
         sex: null,
@@ -191,15 +191,39 @@ export default {
         email: ''
       },
       oldPassword: '',
-      newPassword: ''
+      newPassword: '',
+      check: true
     }
   },
-  watch: {},
+  watch: {
+    editUserInfo: {
+      handler: function(val) { // 此处注意，handler函数不能为箭头函数，this会取上下文，而不是组件里的this,此外，深度监听，必须为handler函数名，否则会无效果
+        console.log(val)
+        var flag = new RegExp('[`~!@#$^&*()=|{}\':;\',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“\'。，、？ ]')
+        // 判断文件名是否包含特殊字符
+        if (flag.test(val.userName || val.nickName)) {
+          this.$toast.error('不能包含特殊字符')
+          this.check = false
+        }
+        // 可以做些相应的处理
+      },
+      deep: true
+    }
+
+    // function(val) {
+    // var flag = new RegExp('[`~!@#$^&*()=|{}\':;\',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“\'。，、？ ]')
+    // // 判断文件名是否包含特殊字符
+    // if (flag.test(val.userName)) {
+    //   this.$toast.error('不能包含特殊字符')
+    //   this.check = false
+    // }
+
+  },
   computed: {},
   created () {
     getUserInfo().then((res) => {
       this.userInfo = res.data.userInfo
-      this.editForm = res.data.userInfo
+      this.editUserInfo = res.data.userInfo
     })
   },
   mounted () {
@@ -222,7 +246,7 @@ export default {
       //   obj.sex = parseInt(this.editForm.sex)
       //   obj.id = this.userInfo.id
       // }
-      updateUserInfo(this.editForm).then((res) => {
+      updateUserInfo(this.editUserInfo).then((res) => {
         if (res.code === 0) {
           this.$toast.success('保存成功')
           this.userInfo = res.data.userInfo
@@ -374,7 +398,7 @@ input {
   width: 110px;
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 25%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   background: #06a7ff !important;

@@ -248,20 +248,20 @@
       </template>
     </v-contextmenu>
     <!--菜单-->
-    <ContextMenu
-      :left="menuLeft"
-      :top="menuTop"
-      v-show="showMenu"
-      :selectedFile="selectedFile"
-      :file="fileList[this.selectFileIndex]"
-      :count="selectedFileCount"
-    ></ContextMenu>
+    <!--<ContextMenu-->
+    <!--  :left="menuLeft"-->
+    <!--  :top="menuTop"-->
+    <!--  v-show="showMenu"-->
+    <!--  :selectedFile="selectedFile"-->
+    <!--  :file="fileList[this.selectFileIndex]"-->
+    <!--  :count="selectedFileCount"-->
+    <!--&gt;</ContextMenu>-->
   </div>
 </template>
 
 <script>
 import { clearRecoveryFile, deleteRecoveryFile, getRecoveryFile, restoreRecoveryFile } from '@/request/file'
-import ContextMenu from '@/components/common/contextMenu/ContextMenu'
+// import ContextMenu from '@/components/common/contextMenu/ContextMenu'
 import Loading from '@/components/common/loading/Loading'
 import { RecycleMenuList } from '@/libs/map'
 
@@ -269,7 +269,7 @@ export default {
   name: 'Recycle',
   props: {},
   components: {
-    ContextMenu,
+    // ContextMenu,
     Loading
   },
   data () {

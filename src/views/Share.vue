@@ -2,7 +2,7 @@
   <div class="share-main">
     <div class="share-main__tip">
       <div class="text">
-        提示:链接分享(分享失败超过7天以上的链接记录将被自动清理)
+        提示:链接分享(分享失败或分享过期的将被自动清理)
       </div>
       <div class="actions">
         <button
@@ -244,16 +244,16 @@
       ></FileInfo>
       <Loading v-show="loading"></Loading>
     </div>
-    <v-contextmenu class="contextmenu" ref="contextmenu" style="width: 120px" v-show="selectedFileCount>=1">
+    <v-contextmenu class="contextmenu" ref="contextmenu" style="width: 120px">
       <template>
         <v-contextmenu-item style="margin: 3px 0"
-                            v-show="selectedFileCount === 1"
+
                             @click="copyShareLink(fileList[selectFileIndex])">
           <!--<i class="iconfont icon-wenzishibie v-contextmenu-submenu__icon" style="font-size: 14px">-->
           <!--</i>-->
           复制分享链接
         </v-contextmenu-item>
-        <v-contextmenu-item style="margin: 3px 0" v-show="selectedFileCount >= 1"
+        <v-contextmenu-item style="margin: 3px 0"
                             @click="cancelShare(fileList[selectFileIndex])">
           <!--<i class="iconfont icon-wenzishibie v-contextmenu-submenu__icon" style="font-size: 14px">-->
           <!--</i>-->
@@ -376,34 +376,6 @@ export default {
       this.selectFileIndex = -1
       this.selectedFile = new Array(this.fileList.length).fill(false)
     },
-    // // 计算时间差
-    // calcDiffTime (Time) {
-    //   var now = new Date() // 新建一个日期对象，默认现在的时间
-    //   var expireTime = new Date(Time) // 设置过去的一个时间点，"yyyy-MM-dd HH:mm:ss"格式化日期
-    //
-    //   if (now.getTime() > expireTime.getTime()) {
-    //     // 如果现在的时间大于过去的时间，则返回差值
-    //     // 交换两个时间的值
-    //     const temp = now
-    //     now = expireTime
-    //     expireTime = temp
-    //   }
-    //   const difftime = (expireTime - now) / 1000 // 计算时间差,并把毫秒转换成秒
-    //   // console.log('expireTime:' + expireTime + '       now:' + now + '      difftime:' + difftime)
-    //   const days = parseInt(difftime / 86400) // 天  24*60*60*1000
-    //   const hours = parseInt(difftime / 3600) - 24 * days // 小时 60*60 总小时数-过去的小时数=现在的小时数
-    //   const minutes = parseInt(difftime % 3600 / 60) // 分钟 -(day*24) 以60秒为一整份 取余 剩下秒数 秒数/60 就是分钟数
-    //   if (days > 0) {
-    //     return days + '天'
-    //   } else if (hours > 0) {
-    //     return hours + '小时'
-    //   } else if (minutes > 0) {
-    //     return minutes + '分钟'
-    //   } else {
-    //     return minutes + '秒'
-    //   }
-    //   // this.BindTime = days + '天' + hours + '时' + minutes + '分'
-    // },
     // 修改排序方式
     changeOrder (column) {
       if (column !== this.orderColumn) {

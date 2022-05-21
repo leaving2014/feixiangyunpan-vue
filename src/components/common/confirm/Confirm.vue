@@ -3,7 +3,7 @@
   <div
     class="u-dialog__wrapper dialog-common-header"
     ref="dialog"
-    style="z-index: 2555"
+    style="z-index: 7999"
   >
     <!--:class="{ 'pop-up': true, show: show }"-->
     <div

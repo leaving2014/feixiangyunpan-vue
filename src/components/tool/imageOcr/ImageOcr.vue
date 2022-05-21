@@ -263,29 +263,18 @@ export default {
       -o-object-fit: fill;
 
       .image-container {
-        object-fit: contain;
+        position: relative;
         width: 100%;
-        height: 100%;
-        //bottom: 0;
-        //left: 0;
-        //overflow: hidden;
-        //position: absolute;
-        //right: 0;
-        //top: 0;
+        height: calc(100% - 60px);
 
         img {
-          object-fit: fill;
-          //height: auto;
-          //margin: 15px auto;
-          //max-width: 90% !important;
-          //width: auto;
-          //height: 501.694px;
-          //margin-left: 43.15px;
-          //margin-top: 50.9531px;
-          //position: relative;
-          //width: 891.9px;
-          //max-width: none !important;
-          transform: none;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          object-fit: contain;
+          transform: translate(-50%, -50%);
+          width: 100%;
+          height: 100%;
 
         }
       }
@@ -302,11 +291,12 @@ export default {
 
       .text-list {
         width: 100%;
-        height: 50px;
+        height: calc(100% - 60px);
         padding-left: 15px;
-        line-height: 50px;
+        line-height: 30px;
         font-weight: 600;
         text-align: left;
+        overflow-y: auto;
       }
     }
   }

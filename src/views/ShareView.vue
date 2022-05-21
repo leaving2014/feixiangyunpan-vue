@@ -146,7 +146,7 @@
         path="/"
         style="width: calc(100% - 272px); margin: 0 auto"
       ></PathNav>
-      <FileTable :file-list="fileList"></FileTable>
+      <FileTable :file-list="fileList" :share-user="shareUser"></FileTable>
     </div>
   </div>
 </template>
@@ -154,11 +154,9 @@
 <script>
 import {
   checkShareLinkCode,
-  getShareFileList,
   getShareInfo,
   saveShareFile
 } from '@/request/file'
-import { getShareUserInfo } from '@/request/user'
 import PathNav from '@/components/common/pathNav/PathNav'
 import FileTable from '@/components/file/FileTable.vue'
 import { mapGetters } from 'vuex'
@@ -520,7 +518,11 @@ export default {
               }
             })
           }
-          this.getShareInfo()
+          if (res.data.file == null) {
+            this.$toast.error('分享文件已删除')
+          } else {
+            this.getShareInfo()
+          }
         } else {
           this.$toast.error(res.data.msg)
         }
@@ -533,42 +535,16 @@ export default {
         if (res.code === 0) {
           this.shareInfo = res.data.share
           this.shareUser = res.data.user
+
           if (this.auth) {
             this.fileList.length = 0
             this.fileList.push(res.data.file)
           }
-          if (this.shareUserInfo.userName == null) {
-            this.getShareUserInfo(res.data.share.userId)
-          }
+          // if (this.shareUserInfo.userName == null) {
+          //   this.getShareUserInfo(res.data.share.userId)
+          // }
         } else {
           this.$toast.error(res.msg)
-        }
-      })
-    },
-
-    getShareFileList () {
-      getShareFileList({
-        shareFilePath: this.shareFilePath,
-        shareBatchNum: this.shareBatchNum,
-        userId: 1
-      }).then((res) => {
-        if (res.success) {
-          this.fileList = res.data.list
-          this.loading = false
-          this.init()
-        } else {
-          this.$toast.error(res.msg)
-        }
-      })
-    },
-    async getShareUserInfo (id) {
-      const data = {
-        userId: id
-      }
-      console.log('data', data)
-      getShareUserInfo(data).then((res) => {
-        if (res.code === 0) {
-          this.shareUserInfo = res.data.userInfo
         }
       })
     }

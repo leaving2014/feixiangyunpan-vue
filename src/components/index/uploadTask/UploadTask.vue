@@ -325,6 +325,7 @@ export default {
           // 本次所有的文件均已上传完毕
           this.$toast.success('上传完毕')
           Bus.$emit('updateFileList')
+          // this.getFileList(this.fullPath,true)
           // this.serviceEl.$store.dispatch('showStorage')
           this.callback(true)
         }

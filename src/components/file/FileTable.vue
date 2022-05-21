@@ -50,22 +50,6 @@
                 </template>
               </div>
             </th>
-            <!--<th class="table__header-th cursor-p is-name" v-for="(item,index) in header">-->
-            <!--  <div class="text-ellip content inline-block-v-middle">-->
-            <!--    <span v-show="this.selectedFileCount === 0" class="title">文件名</span>-->
-            <!--  </div>-->
-            <!--</th>-->
-            <!--<th class="table__header-th cursor-p">-->
-            <!--  <div class="text-ellip content inline-block-v-middle">-->
-            <!--    <span class="title">修改时间</span>-->
-            <!--  </div>-->
-            <!--</th>-->
-            <!--<th class="table__header-th cursor-p">-->
-            <!--  <div class="text-ellip content inline-block-v-middle">-->
-            <!--    <span class="title">大小</span>-->
-            <!--  </div>-->
-            <!--</th>-->
-
           </tr>
           </thead>
         </table>
@@ -80,87 +64,10 @@
             <col width="23%">
           </colgroup>
           <tbody>
-          <!--新建文件夹-->
-          <!--<tr class="table__body-row  mouse-choose-item" v-if="showCreateFolder">-->
-          <!--  <td class="text-center is-select">-->
-          <!--    <label-->
-          <!--      class="u-checkbox is-disabled"-->
-          <!--    >-->
-          <!--      <span-->
-          <!--        class="u-checkbox__input"-->
-          <!--      >-->
-          <!--        <span-->
-          <!--          class="u-checkbox__inner"-->
-          <!--        ></span>-->
-          <!--        &lt;!&ndash;@click.stop="selectFile(index, $event)"&ndash;&gt;-->
-          <!--        <input-->
-          <!--          type="checkbox"-->
-          <!--          aria-hidden="false"-->
-          <!--          class="u-checkbox__original"-->
-          <!--          value=""-->
-          <!--        />-->
-          <!--      </span>-->
-          <!--    </label>-->
-          <!--  </td>-->
-          <!--  &lt;!&ndash;文件名&ndash;&gt;-->
-          <!--  <td class="text-ellip table__td"-->
-          <!--  >-->
-          <!--    <div class="list-name cursor-p">-->
-          <!--      <div>-->
-          <!--        <img-->
-          <!--          class="list-name__title-icon img-before-icon iconfont icon-pure-color"-->
-          <!--          src="@/assets/files/folder.png"-->
-          <!--        />-->
-          <!--        <div class="list-name__title-edit-input u-input u-input&#45;&#45;small inline-block-v-middle">-->
-          <!--          <input type="text" class="u-input__inner inline-block-v-middle"-->
-          <!--                 @keyup.enter="createFolderAction"-->
-          <!--                 autofocus="autofocus"-->
-          <!--                 autocomplete="off"-->
-          <!--                 ref="createFolderInput">-->
-          <!--        </div>-->
-          <!--        <div class="nd-list-name__title-edit-action is-confirm inline-block-v-middle cursor-p">-->
-          <!--          <i class="iconfont icon-duihao" @click="createFolderAction"></i>-->
-          <!--        </div>-->
-          <!--        <div class="nd-list-name__title-edit-action is-cancel inline-block-v-middle cursor-p">-->
-          <!--          <i-->
-          <!--            class="iconfont icon-guanbi"-->
-          <!--            @click="function () { showCreateFolder = false}-->
-          <!--        "-->
-          <!--          ></i>-->
-          <!--        </div>-->
-
-          <!--      </div>-->
-          <!--    </div>-->
-          <!--  </td>-->
-          <!--  &lt;!&ndash;修改时间&ndash;&gt;-->
-          <!--  <td class="text-ellip nd-table__td normal-column">-->
-          <!--    <div class="file-list-time-column">-->
-          <!--      <p class="column-content-hide">-->
-          <!--        {{ new Date().getFullYear() + '-' + new Date().getMonth() + '-' + new Date().getDate() + ' ' + new-->
-          <!--      Date().getHours() + ':' + new Date().getMinutes()-->
-          <!--        }}</p>-->
-          <!--      <div class="nd-file-list__line-action theme-primary-text column-content-show">-->
-          <!--        <i title="分享"-->
-          <!--           class="inline-block-v-middle cursor-p u-icon file-list__line-action-item u-icon-share"></i>-->
-          <!--        <i title="下载"-->
-          <!--           class="inline-block-v-middle cursor-p u-icon file-list__line-action-item u-icon-share"></i>-->
-          <!--        <i title="更多"-->
-          <!--           class="inline-block-v-middle cursor-p u-icon file-list__line-action-item u-icon-share"></i>-->
-          <!--      </div>-->
-          <!--    </div>-->
-          <!--  </td>-->
-          <!--  &lt;!&ndash;大小&ndash;&gt;-->
-          <!--  <td class="text-ellip nd-table__td normal-column">-->
-          <!--    <section>-->
-          <!--      <span>-</span>-->
-          <!--    </section>-->
-          <!--  </td>-->
-          <!--</tr>-->
-          <!--@contextmenu.prevent="openMenu($event, item, index)"-->
           <tr :data-id="item.id" class="table__body-row  mouse-choose-item"
               :class="selectedFile[index] === true ? 'is-checked' : ''"
               v-contextmenu:contextmenu
-              @contextmenu.prevent="showContentMenuType(index)"
+              @contextmenu.prevent="showContentMenuType(index,$event)"
               :index="index"
               :fid="item.id"
               :key="'id' + index"
@@ -280,6 +187,12 @@ export default {
     usePage: {
       type: String,
       default: 'file'
+    },
+    shareUser: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     },
     header: {
       type: Array,
@@ -404,7 +317,7 @@ export default {
           console.log(file)
           data = {
             path: newVal,
-            userId: file[0].userId
+            userId: this.shareUser.id
             // userId: file[0].userId,
             // fileId: file[0].parentPathId
           }
@@ -538,20 +451,41 @@ export default {
       this.showMenu = false
       this.showCreateFolder = false
     },
-    showContentMenuType (index) {
-      // const _this = this
-      this.selectFileIndex = index
-      this.item = this.fileList[index]
+
+    showContentMenuType (index, e) {
       if (this.selectedFile[index] === true) {
       } else {
-        // this.init()
+        this.init()
       }
+      this.menuFileIndex = e.target
+        .closest('.table__body-row')
+        .getAttribute('index')
+      this.menuLeft = e.screenX - 190
+      this.menuTop = e.screenY - 160
+      this.showMenu = true
       if (this.getSelectedFileIndex(this.selectedFile, index) === index) {
-        this.selectFile(index)
+        this.selectFile(index, e)
       } else if (this.selectedFileCount === 0) {
-        this.selectFile(index)
+        this.selectFile(index, e)
       }
-      return this.$store.state.selectFileCount
+      if (this.selectedFile.length === 0) {
+        this.selectedFileCount = 0
+      }
+
+      // console.log('右键点击文件', index)
+      // // const _this = this
+      // this.selectFileIndex = index
+      // this.item = this.fileList[index]
+      // if (this.selectedFile[index] === true) {
+      // } else {
+      //   // this.init()
+      // }
+      // if (this.getSelectedFileIndex(this.selectedFile, index) === index) {
+      //   this.selectFile(index)
+      // } else if (this.selectedFileCount === 0) {
+      //   this.selectFile(index)
+      // }
+      // return this.$store.state.selectFileCount
     },
     clickActions: function(index, item, e) {
       console.log('==index:' + index + '==fileName:' + item.fileName)
@@ -579,9 +513,7 @@ export default {
     },
     // 选择文件
     selectFile (index) {
-      console.log('点击选中文件index=======' + index)
-      this.selectFileIndex = index
-      // e.stopImmediatePropagation()
+      console.log('选中文件index:' + index)
       if (this.selectAllFiles === true) {
         this.selectAllFiles = false
       }
@@ -603,19 +535,7 @@ export default {
         this.selectedFile[index] = false
         this.$store.commit('updateSelectFileCount', this.selectedFileCount)
       }
-
       if (this.selectedFileCount === 1) {
-        this.$store.commit('updateSelectFileIndex', index)
-        // 选中文件为1 且路径为空时
-        if (this.$route.query.filePath === undefined) {
-          this.selectFullPath = '/' + this.fileList[index].fileName
-          this.$store.commit('updateSelectFullPath', this.selectFullPath)
-        } else {
-          // 路径不为空时
-          this.selectFullPath =
-            this.$route.query.filePath + this.fileList[index].fileName
-          this.$store.commit('updateSelectFullPath', this.selectFullPath)
-        }
         this.selectFileIndex = this.getSelectedFileIndex(
           this.selectedFile,
           true
@@ -624,8 +544,50 @@ export default {
         this.selectFileIndex = -1
       }
 
-      // console.log('当前选中状态:' + this.selectedFile[index])
-      // console.log(this.selectedFile)
+      // console.log('点击选中文件index=======' + index)
+      // this.selectFileIndex = index
+      // // e.stopImmediatePropagation()
+      // if (this.selectAllFiles === true) {
+      //   this.selectAllFiles = false
+      // }
+      // if (this.selectedFile[index] == false) {
+      //   this.selectedFileCount += 1
+      //   this.selectedFile[index] = true
+      //   this.$store.commit('updateSelectFileCount', this.selectedFileCount)
+      //   // 判断是否所有都选则
+      //   if (
+      //     this.selectedFile.filter((file) => file == true).length ===
+      //     this.fileList.length
+      //   ) {
+      //     this.selectAllFiles = true
+      //   } else {
+      //     this.selectAllFiles = false
+      //   }
+      // } else {
+      //   this.selectedFileCount -= 1
+      //   this.selectedFile[index] = false
+      //   this.$store.commit('updateSelectFileCount', this.selectedFileCount)
+      // }
+      //
+      // if (this.selectedFileCount === 1) {
+      //   this.$store.commit('updateSelectFileIndex', index)
+      //   // 选中文件为1 且路径为空时
+      //   if (this.$route.query.filePath === undefined) {
+      //     this.selectFullPath = '/' + this.fileList[index].fileName
+      //     this.$store.commit('updateSelectFullPath', this.selectFullPath)
+      //   } else {
+      //     // 路径不为空时
+      //     this.selectFullPath =
+      //       this.$route.query.filePath + this.fileList[index].fileName
+      //     this.$store.commit('updateSelectFullPath', this.selectFullPath)
+      //   }
+      //   this.selectFileIndex = this.getSelectedFileIndex(
+      //     this.selectedFile,
+      //     true
+      //   )
+      // } else {
+      //   this.selectFileIndex = -1
+      // }
     },
     // 获取选中文件索引
     getSelectedFileIndex (arrays, obj) {

@@ -168,6 +168,7 @@ import { codeMirrorThemeList, fileSuffixCodeModeMap, fontSizeList } from '@/libs
 // 文件修改相关
 import store from '@/store/index.js'
 import { getFilePreview, modifyFileContent } from '@/request/file'
+import Bus from '@/libs/bus'
 
 export default {
   name: 'CodePreview',
@@ -295,24 +296,36 @@ export default {
       if (!this.isModify) {
         return false
       }
+      if (this.fileInfo.origin === 1) {
+        this.$confirmBox({
+          title: '转存文件',
+          msg: '该文件为引用文件,需要转存源文件到自己的网盘才能编辑,是否要转存? 转存后会关闭当前编辑窗口,请重新打开文件',
+          showType: 0
+        }).then(() => {
+          modifyFileContent({
+            fileId: this.fileInfo.id,
+            fileContent: this.codeMirrorText
+          })
+            .then((res) => {
+              this.codeMirrorLoading = false
+              if (res.success) {
+                this.$toast.success('已保存')
+                Bus.$emit('updateFileList')
+                this.closeCodePreview()
+                this.$toast.success('请重新打开文件')
+              } else {
+                this.$toast.error(res.message)
+              }
+            })
+            .catch((err) => {
+              this.codeMirrorLoading = false
+              this.$toast.error(err.message)
+            })
+        }).catch(() => {
+          this.closeCodePreview()
+        })
+      }
       this.codeMirrorLoading = true
-      modifyFileContent({
-        fileId: this.fileInfo.id,
-        fileContent: this.codeMirrorText
-      })
-        .then((res) => {
-          this.codeMirrorLoading = false
-          if (res.success) {
-            this.$message.success('已保存')
-            this.getCodeText()
-          } else {
-            this.$message.error(res.message)
-          }
-        })
-        .catch((err) => {
-          this.codeMirrorLoading = false
-          this.$message.error(err.message)
-        })
     },
     /**
      * codemirror 配置项改变时触发

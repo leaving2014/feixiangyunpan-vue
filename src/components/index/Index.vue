@@ -1341,9 +1341,9 @@ export default {
       console.log('文件上传成功')
     })
     // 重新获取文件列表
-    // Bus.$on('updateFileList', (e) => {
-    //   this.getFileList(this.fullPath, true)
-    // })
+    Bus.$on('updateFileList', (e) => {
+      this.getFileList(this.fullPath, true)
+    })
   },
   destroyed: function() { // 离开页面生命周期函数
 
@@ -1558,9 +1558,10 @@ export default {
           if (res.code === 0) {
             if (res.data.progress >= 100) {
               Bus.$emit('toastMsg', ' 解压完成')
-              _this.getFileList(this.fullPath, true)
               window.clearInterval(_this.unzipTimer)
               _this.unzipTimer = null
+              Bus.$emit('updateFileList')
+              // _this.getFileList(this.fullPath, true)
             } else {
               Bus.$emit('toastMsg', ' 解压进度: ' + res.data.progress + '%')
             }

@@ -40,6 +40,7 @@ import '../../../../public/mavonEditor/css/tomorrow-night.css'
 import '../../../../public/mavonEditor/css/github-markdown.css'
 import axios from 'axios'
 import { getFileInfo, getFilePreview, modifyFileContent } from '@/request/file'
+import Bus from '@/libs/bus'
 
 export default {
   name: 'MarkdownPreview',
@@ -192,7 +193,7 @@ export default {
       this.markdownLoading = true
       getFilePreview({
         id: this.fileInfo.identifier,
-        time: this.getFileCreateTimeStamp(this.fileInfo),
+        time: this.getFileCreateTimeStamp(this.currentFileInfo),
         fileType: this.fileInfo.fileType,
         extensionName: this.fileInfo.fileExt
       }).then((res) => {
@@ -212,25 +213,38 @@ export default {
       this.markdownLoading = true
       console.log('userFileId: this.fileInfo.id' + this.fileInfo.id)
       console.log('修改内容: ' + fileId)
-      modifyFileContent({
-        fileId: this.currentFileInfo.id ? this.currentFileInfo.id : this.fileInfo.id,
-        fileContent: this.markdownText,
-        timestamp: new Date().getTime()
-      })
-        .then((res) => {
-          this.markdownLoading = false
-          if (res.code === 0) {
-            this.currentFileInfo = res.data.file
-            this.$toast.success('修改成功')
-            this.getMarkdownText()
-          } else {
-            this.$toast.error(res.message)
-          }
+      if (this.currentFileInfo.origin === 1) {
+        this.$confirmBox({
+          title: '转存文件',
+          msg: '该文件为引用文件,需要转存源文件到自己的网盘才能编辑,是否要转存? 转存后会关闭当前编辑窗口,请重新打开文件',
+          showType: 0
+        }).then(() => {
+          modifyFileContent({
+            fileId: this.currentFileInfo.id ? this.currentFileInfo.id : this.fileInfo.id,
+            fileContent: this.markdownText,
+            timestamp: new Date().getTime()
+          })
+            .then((res) => {
+              this.markdownLoading = false
+              if (res.code === 0) {
+                this.currentFileInfo = res.data.file
+                this.$toast.success('修改成功')
+                this.closeMarkdownPreview()
+                Bus.$emit('updateFileList')
+                this.$toast.success('请重新打开文件')
+                // this.getMarkdownText()
+              } else {
+                this.$toast.error(res.message)
+              }
+            })
+            .catch((err) => {
+              this.markdownLoading = false
+              this.$toast.error(err.message)
+            })
+        }).catch(() => {
+          this.$toast.success('取消转存')
         })
-        .catch((err) => {
-          this.markdownLoading = false
-          this.$toast.error(err.message)
-        })
+      }
     },
     /**
      * 关闭 markdown 预览

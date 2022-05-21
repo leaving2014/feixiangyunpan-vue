@@ -165,6 +165,7 @@ export default {
   },
   watch: {},
   created () {
+    this.removeCookies('token')
     this.enableCaptcha = JSON.parse(localStorage.getItem('systemConfig')).enableCaptcha === '1'
     this.activeName = this.$route.query.action || 'login'
     localStorage.removeItem('token')
