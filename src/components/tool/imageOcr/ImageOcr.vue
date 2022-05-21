@@ -12,7 +12,7 @@
           </a>
           <i class="iconfont"
              :class="showOcrTextList ? 'icon-shouqiliebiao':'icon-zhankailiebiao'"
-             :title="showOcrTextList ? '关闭识别文本' : '端口识别文本'"
+             :title="showOcrTextList ? '关闭识别文本' : '打开识别文本'"
              @click="showOcrTextList = !showOcrTextList"
           ></i>
           <i class="iconfont icon-guanbi" @click="handleClosePreview"></i>
