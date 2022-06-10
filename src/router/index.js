@@ -149,7 +149,10 @@ const routes = [
           import(
             /* webpackChunkName: "fileManage" */ '@/components/manage/FileManage.vue'
           ),
-        meta: { title: '文件管理' }
+        meta: {
+          requireAuth: true, //  当前路由是否需要登录才可进入
+          title: '文件管理'
+        }
       },
       {
         path: '/manage/users',
@@ -223,6 +226,6 @@ const router = new VueRouter({
 // })
 export default router
 const originalPush = VueRouter.prototype.push
-VueRouter.prototype.push = function push(location) {
+VueRouter.prototype.push = function push (location) {
   return originalPush.call(this, location).catch((err) => err)
 }

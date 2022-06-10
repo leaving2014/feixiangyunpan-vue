@@ -1437,7 +1437,7 @@ export default {
      * @param conversionExt
      */
     fileFormatConversion (row, conversionExt) {
-      var _this = this
+      // var _this = this
       var t = new Date().getTime()
       const data = {
         fileExt: row.fileExt,
@@ -1463,12 +1463,14 @@ export default {
           )
           if (res.data.finish === 1) {
             clearInterval(formatTimer)
-            _this.getFileList()
+            Bus.$emit('updateFileList')
+            // _this.getFileList()
           }
           Bus.$emit('toastMsg', ' 转换进度: ' + res.data.progress + '%')
           if (res.data.progress >= 100) {
-            _this.getFileList(this.fullPath, true)
+            // _this.getFileList(this.fullPath, true)
             Bus.$emit('toastMsg', ' 转换完成')
+            Bus.$emit('updateFileList')
             clearInterval(formatTimer)
           }
         })
@@ -1478,9 +1480,9 @@ export default {
           this.$toast.success('转换任务创建成功', -1)
           // this.file = res.data.file
           if (this.$route.query.category === 'all') {
-            _this.getFileList(row.filePath, true)
+            // _this.getFileList(row.filePath, true)
           } else {
-            this.getFileListByType(this.$route.query.category)
+            // this.getFileListByType(this.$route.query.category)
           }
         } else {
           this.$toast.error(res.msg)

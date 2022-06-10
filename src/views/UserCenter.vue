@@ -246,6 +246,7 @@ export default {
       //   obj.sex = parseInt(this.editForm.sex)
       //   obj.id = this.userInfo.id
       // }
+      delete this.editUserInfo.role
       updateUserInfo(this.editUserInfo).then((res) => {
         if (res.code === 0) {
           this.$toast.success('保存成功')

@@ -7,18 +7,18 @@ router.beforeEach((to, from, next) => {
   // console.log('to', to + ' ========= from' + from)
 
   // 管理员
-  if (to.path.includes('manage')) {
-    if (
-      sessionStorage.getItem('role') == 'admin' ||
-      JSON.parse(localStorage.getItem('userInfo')).role > 1
-    ) {
-      next()
-    } else {
-      next({
-        path: '/'
-      })
-    }
-  }
+  // if (to.path.includes('manage')) {
+  //   if (
+  //     sessionStorage.getItem('role') == 'admin' ||
+  //     JSON.parse(localStorage.getItem('userInfo')).role > 1
+  //   ) {
+  //     next()
+  //   } else {
+  //     next({
+  //       path: '/'
+  //     })
+  //   }
+  // }
   // 当前路由需要登录才可进入
   if (to.matched.some((m) => m.meta.auth)) {
     // 调用获取用户登录状态和信息的接口
@@ -26,7 +26,7 @@ router.beforeEach((to, from, next) => {
     if (!store.getters.isLogin) {
       if (
         process.env.NODE_ENV !== 'development' &&
-        location.origin === 'http://txcdn.leaving.top'
+        location.origin === 'http://www.leaving.top'
       ) {
         globalFunction.goAccount('/login')
       } else {

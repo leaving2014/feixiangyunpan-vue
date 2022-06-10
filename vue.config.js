@@ -5,8 +5,8 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 // const TerserPlugin = require('terser-webpack-plugin')
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 //  TODO 打包时把以下代码注释取消
-// const webpack = require('webpack')
-// const CompressionPlugin = require('compression-webpack-plugin')
+const webpack = require('webpack')
+const CompressionPlugin = require('compression-webpack-plugin')
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? '/pan' : '/', // 打包配置
   assetsDir: 'static', // 静态资源保存路径
@@ -143,7 +143,7 @@ module.exports = {
           directories: [],
           files: ['package-lock.json', 'yarn.lock']
         }
-      })
+      }),
       // 分析插件
       // new BundleAnalyzerPlugin({
       //   analyzerMode: 'server',
@@ -158,15 +158,15 @@ module.exports = {
       //   logLevel: 'info'
       // }),
       //  TODO 打包时把以下代码注释取消
-      // new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-      // // 压缩成 .gz 文件
-      // new CompressionPlugin({
-      //   filename: '[path][base].gz',
-      //   algorithm: 'gzip',
-      //   test: /\.js$|\.css$|\.html$/,
-      //   threshold: 10240,
-      //   minRatio: 0.8
-      // })
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+      // 压缩成 .gz 文件
+      new CompressionPlugin({
+        filename: '[path][base].gz',
+        algorithm: 'gzip',
+        test: /\.js$|\.css$|\.html$/,
+        threshold: 10240,
+        minRatio: 0.8
+      })
     ]
   }
 }

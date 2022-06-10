@@ -205,8 +205,14 @@ export default {
   },
   methods: {
     getAccountHref (path) {
+      if (location.port == 8081) {
+        console.log('获取登录的path,端口为', 8081)
+        return `http://localhost:8081/#${path}?redirect=${location.href}`
+      } else {
+        return `https://www.leaving.top/pan/#${path}?redirect=${location.href}`
+      }
       // return window.location.host + `/#${path}?redirect=${location.href}`
-      return `/#${path}?redirect=${location.href}`
+      // return `/pan/#${path}?redirect=${location.href}`
     },
     getUserInfo () {
       getUserInfo().then((res) => {
@@ -220,7 +226,7 @@ export default {
           this.$store.commit('updateUserInfo', res.data.userInfo)
         } else {
           this.$router.push('/login')
-          this.$toast.error(res.msg)
+          // this.$toast.error(res.msg)
         }
       })
     },

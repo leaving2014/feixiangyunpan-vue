@@ -154,6 +154,7 @@ export default {
     },
     getUserInfo () {
       getUserInfo().then((res) => {
+        console.log('manage获取用户信息', res)
         if (res.code === 0) {
           if (res.data.userInfo.role === 2 || res.data.userInfo.role === 3) {
             localStorage.setItem('userInfo', JSON.stringify(res.data.userInfo))
@@ -161,14 +162,9 @@ export default {
             this.$store.commit('updateUserInfo', res.data.userInfo)
           } else {
             this.$toast.success('您没有权限访问该页面')
-            // this.$router.push({
-            //   path: '/manage/files',
-            //   query: {
-            //     category: 'all'
-            //   }
-            // })
           }
         } else {
+          this.$router.push('/login')
           this.$toast.error(res.msg)
         }
       })

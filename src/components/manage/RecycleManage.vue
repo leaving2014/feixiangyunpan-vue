@@ -61,7 +61,7 @@
                 </label>
               </th>
               <th class="table__header-th">
-                <div class="text-ellip content inline-block-v-middle" @click="changeOrder('name')">
+                <div class="text-ellip content inline-block-v-middle" @click="changeOrder('fileName')">
                   <section class="recycle-list__name_header">
                       <span>{{
                           selectedFileCount > 0
@@ -78,7 +78,7 @@
                 </div>
               </th>
               <th class="table__header-th">
-                <div class="text-ellip content inline-block-v-middle" @click="changeOrder('size')">
+                <div class="text-ellip content inline-block-v-middle" @click="changeOrder('fileSize')">
                   <section class="recycle-list__name_header">
                     <span>大小</span>
                   </section>
@@ -92,7 +92,7 @@
                 </div>
               </th>
               <th class="table__header-th">
-                <div class="text-ellip content inline-block-v-middle" @click="changeOrder('time')">
+                <div class="text-ellip content inline-block-v-middle" @click="changeOrder('fileUpdateTime')">
                   <section class="recycle-list__name_header">
                     <span>删除时间</span>
                   </section>

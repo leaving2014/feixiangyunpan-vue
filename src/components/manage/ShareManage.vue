@@ -31,7 +31,7 @@
               <col width="15%" />
               <col width="20%" />
               <col width="15%" />
-              <col width="15%" />
+              <col width="16%" />
             </colgroup>
             <thead>
             <tr class="table__header-row">

@@ -94,7 +94,7 @@
               <th class="table__header-th">
                 <div class="text-ellip content inline-block-v-middle" @click="changeOrder('status')">
                   <section class="user-list__name_header">
-                    <span>状态</span>
+                    <span>账号状态</span>
                   </section>
                   <div class="nd-sort" v-show="orderColumn=='status'">
                     <i class="iconfont icon icon-shangsanjiaoxing"
@@ -265,7 +265,7 @@
 
       <Loading v-show="loading"></Loading>
     </div>
-    <v-contextmenu class="contextmenu" ref="contextmenu" style="width: 120px" v-show="selectedCount===1">
+    <v-contextmenu class="contextmenu" ref="contextmenu" style="width: 120px">
       <template>
         <v-contextmenu-item style="margin: 3px 0" @click="showEditDialog(userList[selectUserIndex].id)">
           <!--<i class="iconfont icon-wenzishibie v-contextmenu-submenu__icon" style="font-size: 14px">-->

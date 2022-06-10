@@ -244,6 +244,27 @@ export default {
         }).catch(() => {
           this.$toast.success('取消转存')
         })
+      } else {
+        modifyFileContent({
+          fileId: this.currentFileInfo.id ? this.currentFileInfo.id : this.fileInfo.id,
+          fileContent: this.markdownText,
+          timestamp: new Date().getTime()
+        })
+          .then((res) => {
+            this.markdownLoading = false
+            if (res.code === 0) {
+              this.currentFileInfo = res.data.file
+              this.$toast.success('修改成功')
+              Bus.$emit('updateFileList')
+              // this.getMarkdownText()
+            } else {
+              this.$toast.error(res.message)
+            }
+          })
+          .catch((err) => {
+            this.markdownLoading = false
+            this.$toast.error(err.message)
+          })
       }
     },
     /**
