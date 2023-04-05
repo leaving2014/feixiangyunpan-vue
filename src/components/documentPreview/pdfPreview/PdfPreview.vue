@@ -9,9 +9,6 @@
       </div>
       <div class="header-right inline-block-v-middle">
         <i class="iconfont icon-pdfturnword" @click="toDoc(this.fileInfo,'docx')" title="PDF转Word"></i>
-        <a :href="getDownloadFilePath(this.fileInfo)">
-          <i class="iconfont icon-xiazai"></i>
-        </a>
         <i class="iconfont icon-guanbi" @click="handleClosePreview"></i>
       </div>
     </div>
@@ -24,7 +21,6 @@
             <div class="thumbnail-list"
                  ref="contentScroll"
             >
-              <!--:class="i === currentPage ? 'active' : ''"-->
               <div class="thumbnail-pdf thumbnail-list-item pdf-page"
                    :class="i === currentPage ? 'active' : ''"
                    v-for="i in pageNum"
@@ -66,7 +62,6 @@
 
       <!--显示主区域-->
       <div class="pdf-container">
-
         <!--全部显示-->
         <div class="pdf-dashboard pdf-page-mount default"
              ref="pdfContainer"
@@ -93,15 +88,10 @@
                    @error="pdfError($event)"
                    style="padding: 0px 5px; width: 100%; margin: 0 auto"
               >
-                <!--@num-pages="pageCount = $event"-->
-
               </pdf>
             </div>
-
           </div>
-
         </div>
-
         <Loading v-if="pageCount=0"></Loading>
       </div>
     </div>
@@ -167,7 +157,6 @@
 
         <i class="iconfont icon-jia" @click="changeScale(1)"></i>
       </div>
-
     </div>
   </div>
 </template>
@@ -175,7 +164,7 @@
 <script>
 import pdf from 'vue-pdf'
 import Vue from 'vue'
-import { formatconversion, getProgress } from '@/request/file'
+import { getProgress } from '@/request/file'
 import Bus from '@/libs/bus'
 
 var formatTimer
@@ -200,6 +189,8 @@ export default {
       //
       width: 0,
       height: 0,
+      contentPageHeight: 200,
+      pageHeight: 0,
       // 使用键盘上下移动
       pressKey: false,
       scale: 100,
@@ -351,7 +342,7 @@ export default {
             try {
               changeUrl = window.URL.createObjectURL(file)
             } catch (error) {
-
+              console.error(error)
             }
           }
           if (type === 1) {
@@ -420,19 +411,6 @@ export default {
       var step = this.scale * 0.5
       // 减
       if (num < 0) {
-        //   if (this.scale <= 5) {
-        //   step = 1
-        // } else if (this.scale <= 10) {
-        //   step = 5
-        // } else if (this.scale <= 35) {
-        //   step = 15
-        // } else if (this.scale <= 50) {
-        //   step = 25
-        // } else if (this.scale <= 100) {
-        //   step = 50
-        // } else if (this.scale <= 200) {
-        //   step = 100
-        // }
         if (this.scale > 500) {
           step = 150
         } else if (this.scale >= 200) {
@@ -448,8 +426,6 @@ export default {
         } else {
           step = 1
         }
-        //
-
         // 增
       } else {
         if (this.scale >= 200) {
@@ -485,10 +461,16 @@ export default {
     },
     changePage (index) {
       // const l = this.$el.querySelector('.thumbnail-list')
-      // const r = this.$el.querySelector('.pdf-page-wrapper')
+      const r = this.$el.querySelector('.pdf-page-wrapper')
       // l.scrollTop = r.scrollTop / (r.scrollHeight - r.clientHeight) * (l.scrollHeight - l.clientHeight)
       // r.scrollTop = l.scrollTop / (l.scrollHeight - l.clientHeight) * (r.scrollHeight - r.clientHeight)
       this.currentPage = index
+      debugger
+      const pdfHeight = document.getElementsByClassName('pdf-page')[this.pageNum + 5].offsetHeight + 20
+      const top = (index - 1) * pdfHeight
+      console.log(pdfHeight, top)
+
+      r.scroll(0, top)
     },
     firstPage () {
       this.pressKey = true
@@ -522,6 +504,8 @@ export default {
     },
     // 页面加载回调函数，其中e为当前页数
     pageLoaded (e) {
+      this.contentPageHeight = document.getElementsByClassName('pdf-page')[0].offsetHeight
+      this.pageHeight = document.getElementsByClassName('pdf-page')[this.pageNum + 2].offsetHeight
       // this.currentPage = e
     },
     // 其他的一些回调函数。
@@ -544,17 +528,17 @@ export default {
       const e = event || window.event || arguments.callee.caller.arguments[0]
       const key = e.keyCode // 键盘码值 keycode
       // 左
-      if (key == 37) {
+      if (key === 37) {
         // 上
-      } else if (key == 38) {
+      } else if (key === 38) {
         if (this.currentPage > 1) {
           this.pressKey = true
           this.changePage(this.currentPage - 1)
         }
         // 右
-      } else if (key == 39) {
+      } else if (key === 39) {
         // 下
-      } else if (key == 40) {
+      } else if (key === 40) {
         if (this.currentPage < this.pageNum) {
           this.pressKey = true
           this.changePage(this.currentPage + 1)
@@ -592,12 +576,6 @@ export default {
     toDoc (row, conversionExt) {
       var _this = this
       var t = new Date().getTime()
-      const data = {
-        fileExt: row.fileExt,
-        convertExt: conversionExt,
-        fileId: row.id,
-        t: t
-      }
       formatTimer = setInterval(function() {
         // 每5秒刷新一次
         const data = {
@@ -626,19 +604,19 @@ export default {
           }
         })
       }, 4000)
-      formatconversion(data, true).then((res) => {
-        if (res.code === 0) {
-          this.$toast.success('转换任务创建成功', -1)
-          // this.file = res.data.file
-          if (this.$route.query.category === 'all') {
-            _this.getFileList(row.filePath, true)
-          } else {
-            this.getFileListByType(this.$route.query.category)
-          }
-        } else {
-          this.$toast.error(res.msg)
-        }
-      })
+      // formatconversion(data, true).then((res) => {
+      //   if (res.code === 0) {
+      //     this.$toast.success('转换任务创建成功', -1)
+      //     // this.file = res.data.file
+      //     if (this.$route.query.category === 'all') {
+      //       _this.getFileList(row.filePath, true)
+      //     } else {
+      //       this.getFileListByType(this.$route.query.category)
+      //     }
+      //   } else {
+      //     this.$toast.error(res.msg)
+      //   }
+      // })
     }
   }
 }
