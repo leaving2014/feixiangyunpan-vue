@@ -152,7 +152,7 @@ export default {
         'fast-forward', // 快进查找时间（默认 10 秒）
         'progress', // 播放和缓冲的进度条和滑动条
         'current-time', // 播放的当前时间
-        ' duration', // 媒体的完整持续时间
+        'duration', // 媒体的完整持续时间
         'mute', // 切换静音
         'volume', // 音量控制
         'captions', // 切换字幕
@@ -165,7 +165,6 @@ export default {
       settings: ['captions', 'quality', 'speed', 'loop'],
       // i18n国际化配置
       options: {
-
         i18n: {
           speed: '速度',
           normal: '正常',

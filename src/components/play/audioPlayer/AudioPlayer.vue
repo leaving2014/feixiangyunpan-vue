@@ -66,10 +66,6 @@
 </template>
 
 <script>
-// 鼠标位置和div的左上角位置 差值
-// var dx, dy
-// var screenWidth = window.screen.width
-// var screenHeight = window.screen.height
 export default {
   name: 'AudioPlayer',
   props: {
@@ -105,20 +101,7 @@ export default {
       playIndex: 0,
       audioSrc: '',
       // 播放列表
-      songList: [
-        {
-          fileName: 'Anthony Keyrouz _ Romy Wave - Something Just Like This.mp3',
-          src: '@/assets/audio/Anthony Keyrouz _ Romy Wave - Something Just Like This.mp3'
-        },
-        {
-          fileName: 'G.E.M. 邓紫棋 - 光年之外.mp3',
-          src: '@/assets/audio/G.E.M. 邓紫棋 - 光年之外.mp3'
-        },
-        {
-          fileName: 'G.E.M. 邓紫棋 - 透明.mp3',
-          src: '@/assets/audio/G.E.M. 邓紫棋 - 透明.mp3'
-        }
-      ],
+      songList: [],
       // plyr配置
       options: {
         // 国际化配置
@@ -205,9 +188,7 @@ export default {
     this.player = this.getPlayer
     this.songList = this.audioList
     this.playIndex = this.defaultIndex
-    // this.player.media.src = this.preFix + this.audioList[this.playIndex].fileName
     this.audioSrc = this.getMediaStreamPath(this.audioList[this.defaultIndex])
-    // this.preFix + this.audioList[this.defaultIndex].fileName
     this.songTitle = this.audioList[this.playIndex].fileName
     this.player.on('pause', () => this.pauseAction())
     this.player.on('ended', () => this.endedAction(this.playIndex))
@@ -275,11 +256,15 @@ export default {
       this.selectElement = document.getElementById(this.id)
       const div1 = this.selectElement
       this.selectElement.style.cursor = 'move'
-      this.isDowm = true
       const distanceX = event.clientX - this.selectElement.offsetLeft
       const distanceY = event.clientY - this.selectElement.offsetTop
       document.onmousemove = function(ev) {
         const oevent = ev || event
+        if (oevent.clientX - distanceX < 0 || oevent.clientY - distanceY < 0 || oevent.clientX - distanceX > document.body.offsetWidth - 200 || oevent.clientY - distanceY > document.body.offsetHeight - 40) {
+          div1.style.cursor = 'default'
+          document.onmousemove = null
+          return
+        }
         div1.style.left = oevent.clientX - distanceX + 'px'
         div1.style.top = oevent.clientY - distanceY + 'px'
       }
@@ -303,7 +288,6 @@ export default {
 }
 
 .audio-main.float {
-  margin: 0 5px;
   position: absolute;
   z-index: 3999;
   width: 400px;
