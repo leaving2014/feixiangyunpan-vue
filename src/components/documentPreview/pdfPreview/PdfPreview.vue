@@ -41,7 +41,7 @@
                   style="
                     width: 140px;
                     height: 200px;
-                    padding: 0px 5px;
+                    padding: 0 5px;
                     margin: 0 auto;
                   "
                 >
@@ -70,7 +70,7 @@
           <div class="pdf-page-wrapper"
                ref="dashboarScroll"
                @mouseover="changeFlag(true)"
-               style="transform-origin: 0px 0px; transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1); transition-duration: 0ms; transform: translate(0px, 0px) scale(1) translateZ(0px);">
+               style="transform-origin: 0 0; transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1); transition-duration: 0ms; transform: translate(0px, 0px) scale(1) translateZ(0px);">
 
             <div class="pdf-page loaded"
                  v-for="i in pageNum"
@@ -86,7 +86,7 @@
                    @progress="loadedRatio = $event"
                    @page-loaded="pageLoaded($event)"
                    @error="pdfError($event)"
-                   style="padding: 0px 5px; width: 100%; margin: 0 auto"
+                   style="padding: 0 5px; width: 100%; margin: 0 auto"
               >
               </pdf>
             </div>
@@ -279,13 +279,10 @@ export default {
     // })
     // 当滚动主区域时.目录跟随滚动
     r.addEventListener('mousewheel', function() {
-      // l.scrollTop = r.scrollTop
       Vue.nextTick(() => {
         l.scrollTop = r.scrollTop / (r.scrollHeight - r.clientHeight) * (l.scrollHeight - l.clientHeight)
       })
     })
-
-    // this.handlePreview()
     // 禁用默认缩放
     document.addEventListener('keydown', function(event) {
       if ((event.ctrlKey === true || event.metaKey === true) &&
@@ -465,34 +462,45 @@ export default {
       // l.scrollTop = r.scrollTop / (r.scrollHeight - r.clientHeight) * (l.scrollHeight - l.clientHeight)
       // r.scrollTop = l.scrollTop / (l.scrollHeight - l.clientHeight) * (r.scrollHeight - r.clientHeight)
       this.currentPage = index
-      debugger
-      const pdfHeight = document.getElementsByClassName('pdf-page')[this.pageNum + 5].offsetHeight + 20
+      const pdfHeight = document.getElementsByClassName('pdf-page')[this.pageNum + 5].offsetHeight + 10
       const top = (index - 1) * pdfHeight
-      console.log(pdfHeight, top)
-
       r.scroll(0, top)
     },
     firstPage () {
       this.pressKey = true
       this.currentPage = 1
+      this.main.scroll(0, 0)
     },
     lastPage () {
       this.pressKey = true
       this.currentPage = this.pageNum
+      const r = this.$el.querySelector('.pdf-page-wrapper')
+      const pdfHeight = document.getElementsByClassName('pdf-page')[this.pageNum + 5].offsetHeight + 20
+      const top = (this.currentPage - 1) * pdfHeight
+      console.log(pdfHeight, top)
+      r.scroll(0, top)
     },
     // 上一页函数，
     prePage () {
-      var page = this.currentPage
+      let page = this.currentPage
       page = page > 1 ? page - 1 : this.pageNum
+      const r = this.$el.querySelector('.pdf-page-wrapper')
       this.pressKey = true
       this.currentPage = page
+      const pdfHeight = document.getElementsByClassName('pdf-page')[this.pageNum + 5].offsetHeight + 10
+      const top = (this.currentPage - 1) * pdfHeight
+      r.scroll(0, top)
     },
     // 下一页函数
     nextPage () {
-      var page = this.currentPage
+      let page = this.currentPage
       page = page < this.pageNum ? page + 1 : 1
+      const r = this.$el.querySelector('.pdf-page-wrapper')
       this.pressKey = true
       this.currentPage = page
+      const pdfHeight = document.getElementsByClassName('pdf-page')[this.pageNum + 5].offsetHeight + 10
+      const top = (this.currentPage - 1) * pdfHeight
+      r.scroll(0, top)
     },
     // 页面顺时针翻转90度。
     clock () {
@@ -874,6 +882,7 @@ export default {
     display: flex;
     justify-content: space-between;
     z-index: 99;
+    user-select: none;
 
     .iconfont:hover {
       color: #06a7ff;
