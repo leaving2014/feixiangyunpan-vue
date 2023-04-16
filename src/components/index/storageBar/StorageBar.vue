@@ -39,11 +39,7 @@ import { getStorage } from '@/request/file'
 
 export default {
   name: 'StorageBar',
-  props: {
-    // storageInfo: {
-    //   type: Object
-    // }
-  },
+  props: {},
   components: {},
   data () {
     return {
@@ -62,15 +58,10 @@ export default {
         this.storageSize = newVal.storageSize
       })
     }
-    // storageSizeUsed: function() {
-    //   this.$refs.progress.style.width = this.scrollWithUsed()
-    // }
   },
   computed: {
-    storage () {
-      return this.$store.state.userStorage
-    },
     progressWidth: function() {
+      debugger
       const userd = this.storageSizeUsed
       const size = this.storageSize
       const width = (userd / size) * 100
@@ -103,12 +94,8 @@ export default {
         this.progress = (this.storageSizeUsed / this.storageSize) * 100
       }
     })
-    // this.storageSizeUsed = 0
-    // this.storageSize = 0
-    // this.storageInfo = this.$store.state.userStorage
   },
   mounted () {
-
   },
   methods: {}
 }
@@ -122,19 +109,6 @@ export default {
   margin: 0 auto;
   text-align: center;
 
-  .aside-nav__quota.is-alert .aside-nav__quota-progress-rate {
-    background-color: #E51313FF !important;
-  }
-
-  .aside-nav__quota.is-warn .aside-nav__quota-progress-rate {
-    background-color: #ffd821 !important;
-  }
-
-  .aside-nav__quota.is-nomal .aside-nav__quota-progress-rate {
-    background-color: #06a7ff;
-  }
-
-
   .aside-nav__quota {
     text-align: center;
 
@@ -147,7 +121,6 @@ export default {
       .aside-nav__quota-progress {
         height: 6px;
         border-radius: 4px;
-        //background-color: #eeeff4;
         position: relative;
         width: 140px;
         background: linear-gradient(to right, #4ae1f8, #06a7ff, #e0c111, #e51313, #f30707);
@@ -155,11 +128,11 @@ export default {
 
         .aside-nav__quota-progress-rate {
           position: absolute;
-          right: -0.1px;
+          right: -1px;
           top: 0;
           bottom: 0;
           background-color: #eeeff4;
-          border-radius-right: 4px;
+          border-radius: 0 4px 4px 0;
           max-width: 100%;
         }
 
