@@ -158,15 +158,10 @@ export default {
   },
   computed: {},
   created () {
-    this.mode = getComputedStyle(document.documentElement)
-      .getPropertyValue('--mode')
-      .trim()
+    this.mode = getComputedStyle(document.documentElement).getPropertyValue('--mode').trim()
     console.log('this.getCookies(\'remember\')', this.getCookies('remember'))
-    if (this.getCookies('remember')) {
-      console.log('记住用户,获取用户信息')
-      this.getUserInfo()
-    }
-
+    this.getUserInfo()
+    
     // 获取当前是否是深色模式
     // window.matchMedia('(prefers-color-scheme: dark)').matches
     window.matchMedia && console.log('Is dark mode: ', window.matchMedia('(prefers-color-scheme: dark)').matches)
@@ -223,6 +218,7 @@ export default {
           //   this.setCookies('token', localStorage.getItem('token'), { expires: 7 })
           // }
           this.$store.commit('updateIsLogin', true)
+          this.isLogin = true
           this.$store.commit('updateUserInfo', res.data.userInfo)
         } else {
           this.$router.push('/login')

@@ -61,7 +61,6 @@ export default {
   },
   computed: {
     progressWidth: function() {
-      debugger
       const userd = this.storageSizeUsed
       const size = this.storageSize
       const width = (userd / size) * 100
