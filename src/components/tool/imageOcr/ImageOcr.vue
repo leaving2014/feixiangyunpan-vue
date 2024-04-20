@@ -80,9 +80,6 @@ export default {
   },
   mounted () {
     this.playIndex = this.defaultIndex
-    console.log('this.defaultIndex====' + this.defaultIndex)
-    console.log('this.imageList====' + this.imageList)
-    console.log(this.imageList)
     this.ocr(this.imageList[this.playIndex].id)
   },
   methods: {

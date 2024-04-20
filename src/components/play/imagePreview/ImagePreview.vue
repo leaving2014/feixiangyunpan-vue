@@ -113,8 +113,6 @@ export default {
     this.imageUrlList = this.imageList.map(function(item, index, arr) {
       return that.getRowImageSrc(item)
     })
-    console.log(this.imageUrlList)
-    console.log(this.imageList)
   },
   methods: {
     // 这个初始化会在页面初始的时候就执行一次,后续每次传入图片也会自动执行,所有用来转发事件
