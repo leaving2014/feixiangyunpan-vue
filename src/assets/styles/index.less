@@ -95,7 +95,10 @@
   padding: 18px 24px 0 18px;
 
   .file-list-toolbar__wrapper {
-    height: 32px;
+    height: 40px;
+    padding: 4px 20px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
   }
 
   .file-list-toolbar__wrapper {
@@ -363,7 +366,17 @@
     vertical-align: top;
 
     .file-grid-list__nav {
-      padding: 10px 0 8px 16px;
+      height: 40px;
+      box-sizing: border-box;
+      padding: 0 0 0 26px;;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      height: 50px;
 
       .u-checkbox:last-of-type {
         margin-right: 0;
@@ -410,7 +423,7 @@
 
     .file-grid-list__body {
       //height: calc(100% - 37px);
-      height: calc(100vh - 245px);
+      height: calc(100vh - 235px);
       overflow: auto;
       overflow-y: auto;
       position: relative;
@@ -522,7 +535,7 @@
         display: inline-block;
         width: 112px;
         height: 152px;
-        margin: 0 0 8px 8px;
+        margin: 0 0 8px 26px;
         padding: 4px;
         padding-bottom: 10px;
         border-radius: 8px;
@@ -950,8 +963,8 @@
     cursor: pointer;
     line-height: .2;
     color: #d4d7de;
-    font-size: 3px !important;
-    height: 7px;
+    font-size: 0.7rem !important;
+    height: 0.4rem;
   }
 
   .icon.active {

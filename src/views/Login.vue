@@ -8,23 +8,18 @@
 
       <div
         class="mainBox"
-        :class="[{'mainBoxRegistered':activeName === 'login'} , { 'enable-captcha':enableCaptcha === true && activeName == 'login' } ]"
+        :class="[
+          { mainBoxRegistered: activeName === 'login' },
+          { 'enable-captcha': enableCaptcha === true && activeName == 'login' }
+        ]"
       >
         <!--注册登录-->
-        <el-tabs
-          v-model="activeName"
-          type="card"
-          @tab-click="handleClick"
-          stretch
-        >
+        <el-tabs v-model="activeName" type="card" stretch>
           <el-tab-pane label="登录" name="login">
             <div class="loginInput">
               <el-form ref="form" :model="login" label-width="80px">
                 <el-form-item>
-                  <el-input
-                    v-model="login.userName"
-                    placeholder="请输入用户名"
-                  ></el-input>
+                  <el-input v-model="login.userName" placeholder="请输入用户名"></el-input>
                 </el-form-item>
                 <el-form-item>
                   <div class="el-input">
@@ -34,11 +29,14 @@
                       v-model="login.password"
                       type="password"
                       placeholder="请输入密码"
-                    ></input>
-                    <i class="iconfont" :class="showPassword? 'icon-yincang' : 'icon-icon_yulan'"
-                       style="position:absolute;right: 10px;top: 24px;cursor: pointer" @click="switchPasswod"></i>
+                    />
+                    <i
+                      class="iconfont"
+                      :class="showPassword ? 'icon-yincang' : 'icon-icon_yulan'"
+                      style="position: absolute; right: 10px; top: 24px; cursor: pointer"
+                      @click="switchPasswod"
+                    ></i>
                   </div>
-
                 </el-form-item>
                 <el-form-item v-if="enableCaptchas" class="image-captcha">
                   <el-input
@@ -47,12 +45,18 @@
                     ref="captcha"
                     placeholder="请输入验证码"
                   ></el-input>
-                  <el-image @click="getImageCaptcha"
-                            :src="captchaSrc" style="width: 80px"></el-image>
+                  <el-image
+                    @click="getImageCaptcha"
+                    :src="captchaSrc"
+                    style="width: 80px"
+                  ></el-image>
                 </el-form-item>
                 <!--<el-form-item>-->
                 <!--// 记住我-->
-                <el-checkbox v-model="rememberMe" style="float:left;margin-left:20px;height: 20px">记住我
+                <el-checkbox
+                  v-model="rememberMe"
+                  style="float: left; margin-left: 20px; height: 20px"
+                >记住我
                 </el-checkbox>
                 <!--</el-form-item>-->
                 <el-form-item>
@@ -65,10 +69,7 @@
             <div class="registeredInput">
               <el-form ref="form" :model="login" label-width="80px">
                 <el-form-item>
-                  <el-input
-                    v-model="registered.userName"
-                    placeholder="请输入用户名"
-                  ></el-input>
+                  <el-input v-model="registered.userName" placeholder="请输入用户名"></el-input>
                 </el-form-item>
                 <el-form-item>
                   <el-input
@@ -101,10 +102,7 @@
                 <!--  </div>-->
                 <!--</el-form-item>-->
                 <el-form-item>
-                  <el-button type="primary" @click="clickRegistered"
-                  >注册
-                  </el-button
-                  >
+                  <el-button type="primary" @click="clickRegistered">注册</el-button>
                 </el-form-item>
               </el-form>
             </div>
@@ -211,38 +209,31 @@ export default {
         this.$toast.error('用户名或密码不能为空')
         return
       }
-      userLogin(this.login).then((res) => {
-        console.log('登录res====', res)
-        if (res.code === 0) {
-          this.$toast.success('登录成功')
-          // 登陆成功
-          // this.setCookies('token', localStorage.getItem('token'), { expires: 7 })
-          if (this.rememberMe) {
-            this.setCookies('remember', this.rememberMe, { expires: 7 })
-            this.setCookies(this.$config.tokenKeyName, res.data.token, { expires: 7 })
-          } else {
-            this.setCookies(this.$config.tokenKeyName, res.data.token)
-          }
-          this.setCookies('username', res.data.userInfo.userName, { expires: 7 }) // 存储用户信息
-          this.setCookies('uid', res.data.userInfo.id, { expires: 7 })
-          this.setCookies('nick', res.data.userInfo.nickName, { expires: 7 })
-          this.setCookies('avatar', res.data.userInfo.avatar, { expires: 7 })
-          this.setCookies('role', res.data.userInfo.role, { expires: 7 })
-          this.setCookies('lastLoginType', 'username', { expires: 7 })
-          // 将返回的用户信息保存至localstorage中
-          window.localStorage.setItem(
-            'userInfo',
-            JSON.stringify(res.data.userInfo)
-          )
-          // 将token存入本地
-          window.localStorage.setItem('token', res.data.token)
-          if (sessionStorage.getItem('redirect')) {
-            location.href = sessionStorage.getItem('redirect')
-            sessionStorage.removeItem('redirect')
-          } else {
-            if (res.data.userInfo.role !== 1) {
-              sessionStorage.setItem('role', 'admin')
-              this.$router.push({ path: '/manage' })
+      userLogin(this.login)
+        .then((res) => {
+          if (res.code === 0) {
+            this.$toast.success('登录成功')
+            // 登陆成功
+            // this.setCookies('token', localStorage.getItem('token'), { expires: 7 })
+            if (this.rememberMe) {
+              this.setCookies('remember', this.rememberMe, { expires: 7 })
+              this.setCookies(this.$config.tokenKeyName, res.data.token, { expires: 7 })
+            } else {
+              this.setCookies(this.$config.tokenKeyName, res.data.token)
+            }
+            this.setCookies('username', res.data.userInfo.userName, { expires: 7 }) // 存储用户信息
+            this.setCookies('uid', res.data.userInfo.id, { expires: 7 })
+            this.setCookies('nick', res.data.userInfo.nickName, { expires: 7 })
+            this.setCookies('avatar', res.data.userInfo.avatar, { expires: 7 })
+            this.setCookies('role', res.data.userInfo.role, { expires: 7 })
+            this.setCookies('lastLoginType', 'username', { expires: 7 })
+            // 将返回的用户信息保存至localstorage中
+            window.localStorage.setItem('userInfo', JSON.stringify(res.data.userInfo))
+            // 将token存入本地
+            window.localStorage.setItem('token', res.data.token)
+            if (sessionStorage.getItem('redirect')) {
+              location.href = sessionStorage.getItem('redirect')
+              sessionStorage.removeItem('redirect')
             } else {
               this.$router.replace({
                 path: 'index',
@@ -251,40 +242,34 @@ export default {
                 }
               })
             }
-          }
-          this.$store.commit('updateIsLogin', true)
-          this.$store.commit('updateUserInfo', res.data.userInfo)
-        } else if (res.code === 500) {
-          if (this.enableCaptcha) {
-            if (res.msg === '验证码错误') {
-              this.$toast.error('验证码错误')
-              this.getImageCaptcha()
-              return
+            this.$store.commit('updateIsLogin', true)
+            this.$store.commit('updateUserInfo', res.data.userInfo)
+          } else if (res.code === 500) {
+            if (this.enableCaptcha) {
+              if (res.msg === '验证码错误') {
+                this.$toast.error('验证码错误')
+                this.getImageCaptcha()
+                return
+              }
             }
+            this.$store.commit('updateIsLogin', false)
+            this.$store.commit('updateUserInfo', {})
+            this.$toast.error(res.msg)
           }
-          console.log('登录失败', res)
-          this.$store.commit('updateIsLogin', false)
-          this.$store.commit('updateUserInfo', {})
-          this.$toast.error(res.msg)
-        }
-      }).catch((err) => {
-        if (err.msg === 'Bad credentials') {
-          this.$toast.error('用户名或密码错误')
-        } else {
-          this.$toast.error(err.msg)
-        }
-      })
-    },
-
-    handleClick (e) {
-      console.log(e.name)
+        })
+        .catch((err) => {
+          if (err.msg === 'Bad credentials') {
+            this.$toast.error('用户名或密码错误')
+          } else {
+            this.$toast.error(err.msg)
+          }
+        })
     },
 
     getImageCaptcha () {
       this.t = new Date().getTime()
       this.login.ts = this.t
       this.captchaSrc = this.getHost() + Config.baseContext + '/user/captcha?t=' + this.t
-      console.log('验证码图片src====' + this.captchaSrc)
     },
 
     // 倒计时

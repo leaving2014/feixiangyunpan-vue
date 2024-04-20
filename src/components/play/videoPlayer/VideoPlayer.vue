@@ -232,9 +232,6 @@ export default {
     }
   },
   watch: {
-    'this.player.pip': function(value) {
-      console.log('pip' + value)
-    },
     $router: function() {
       this.handleClosePreview()
     },
@@ -270,7 +267,6 @@ export default {
 
   },
   mounted: function() {
-    console.log('this.focusedElement', this.focusedElement)
     history.pushState(null, null, document.URL)
     window.addEventListener('popstate', function() {
       history.pushState(null, null, document.URL)
@@ -304,7 +300,6 @@ export default {
       this.show = true
       this.pip = false
     })
-    console.log(this.player)
   },
   methods: {
     blur () {
@@ -322,7 +317,6 @@ export default {
     },
     play (index) {
       if (this.playIndex === index) {
-        console.log('当前播放index:' + index)
         if (this.player.playing) {
           this.player.pause()
         } else {

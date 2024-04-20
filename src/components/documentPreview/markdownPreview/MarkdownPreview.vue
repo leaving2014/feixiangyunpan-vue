@@ -19,6 +19,7 @@
         <mavonEditor class="editor-main"
                      v-model="markdownText"
                      @fullScreen="changeFullScreen"
+                     @paste="handlePaste"
                      @save="handleModifyFileContent"
                      @imgAdd="imgAdd" :ishljs="true" />
 
@@ -39,7 +40,14 @@ import 'mavon-editor/dist/css/index.css'
 import '../../../../public/mavonEditor/css/tomorrow-night.css'
 import '../../../../public/mavonEditor/css/github-markdown.css'
 import axios from 'axios'
-import { getFileInfo, getFilePreview, modifyFileContent } from '@/request/file'
+import {
+  addDocument,
+  getFileInfo,
+  getFilePreview,
+  loadDocument,
+  modifyFileContent,
+  modifyDocument
+} from '@/request/file'
 import Bus from '@/libs/bus'
 
 export default {
@@ -58,11 +66,13 @@ export default {
   },
   data () {
     return {
+      docId: '',
       visible: false, //  markdown 预览遮罩层组件是否显示
       fullScreen: false,
       originalMarkdownText: '', //  markdown 原本的文本
       markdownText: '', //  markdown 实时修改的文本
       markdownLoading: false, //  markdown 内容是否加载中
+      imgUploadApi: '',
       // 工具栏
       toolbars: {
         bold: true, // 粗体
@@ -99,6 +109,7 @@ export default {
         subfield: true, // 单双栏模式
         preview: true // 预览
       },
+      type: '',
       currentFileInfo: {} // 当前文件信息
     }
   },
@@ -106,7 +117,14 @@ export default {
     // 监听 markdown 查看组件 显隐状态变化
     visible (val) {
       if (val) {
-        this.getMarkdownText()
+        if (this.doc) {
+          this.docId = this.doc.id
+          this.markdownLoading = false
+          this.originalMarkdownText = this.doc.context.toString()
+          this.markdownText = this.doc.context.toString()
+        } else {
+          this.getMarkdownText()
+        }
         // 添加键盘 Esc 事件
         this.$nextTick(() => {
           document.addEventListener('keyup', (e) => {
@@ -169,6 +187,7 @@ export default {
   },
   created () {
     this.currentFileInfo = this.fileInfo
+    this.type = this.fileInfo.type || ''
     // this.file = this.$store.state.fileList[this.$store.state.selectFileIndex]
   },
   mounted () {
@@ -191,16 +210,35 @@ export default {
      */
     getMarkdownText () {
       this.markdownLoading = true
-      getFilePreview({
-        id: this.fileInfo.identifier,
-        time: this.getFileCreateTimeStamp(this.currentFileInfo),
-        fileType: this.fileInfo.fileType,
-        extensionName: this.fileInfo.fileExt
-      }).then((res) => {
-        this.markdownLoading = false
-        this.originalMarkdownText = res.toString()
-        this.markdownText = res.toString()
-      })
+      if (this.type === 'notes') {
+        if (this.currentFileInfo.id == 0) {
+          return
+        }
+        const data = {
+          id: this.currentFileInfo.id,
+          version: this.currentFileInfo.version
+        }
+        loadDocument(data).then(res => {
+          this.docId = this.currentFileInfo.id
+          this.markdownLoading = false
+          this.originalMarkdownText = res.toString()
+          this.markdownText = res.toString()
+        })
+      } else {
+        getFilePreview({
+          id: this.fileInfo.identifier,
+          time: this.getFileCreateTimeStamp(this.currentFileInfo),
+          fileType: this.fileInfo.fileType,
+          extensionName: this.fileInfo.fileExt
+        }).then((res) => {
+          this.markdownLoading = false
+          this.originalMarkdownText = res.toString()
+          this.markdownText = res.toString()
+        })
+      }
+    },
+    handlePaste (e, p) {
+      console.log(e, p)
     },
     /**
      * 修改 markdown 文本内容
@@ -213,12 +251,70 @@ export default {
       this.markdownLoading = true
       console.log('userFileId: this.fileInfo.id' + this.fileInfo.id)
       console.log('修改内容: ' + fileId)
-      if (this.currentFileInfo.origin === 1) {
-        this.$confirmBox({
-          title: '转存文件',
-          msg: '该文件为引用文件,需要转存源文件到自己的网盘才能编辑,是否要转存? 转存后会关闭当前编辑窗口,请重新打开文件',
-          showType: 0
-        }).then(() => {
+      if (this.type === 'notes') {
+        if (this.currentFileInfo.id === 0) {
+          const data = {
+            userId: this.getCookies('uid'),
+            fileName: '',
+            context: this.markdownText
+          }
+          addDocument(data).then(res => {
+            if (res.code === 0) {
+              this.$toast.success('保存成功')
+              this.docId = res.data.id
+            } else {
+              this.$toast.error(res.msg || '保存失败')
+            }
+          })
+        } else {
+          const data = {
+            userId: this.getCookies('uid'),
+            id: this.fileInfo.id,
+            context: this.markdownText,
+            updateVersion: '0'
+          }
+
+          modifyDocument(data).then(res => {
+            if (res.data.id != this.docId) {
+              this.docId = res.data.id
+              this.$toast.success('更新成功, 当前文档版本 V' + parseFloat(res.data.version.toString()))
+            }
+          })
+          console.log('更新')
+        }
+      } else {
+        if (this.currentFileInfo.origin === 1) {
+          this.$confirmBox({
+            title: '转存文件',
+            msg: '该文件为引用文件,需要转存源文件到自己的网盘才能编辑,是否要转存? 转存后会关闭当前编辑窗口,请重新打开文件',
+            showType: 0
+          }).then(() => {
+            modifyFileContent({
+              fileId: this.currentFileInfo.id ? this.currentFileInfo.id : this.fileInfo.id,
+              fileContent: this.markdownText,
+              timestamp: new Date().getTime()
+            })
+              .then((res) => {
+                this.markdownLoading = false
+                if (res.code === 0) {
+                  this.currentFileInfo = res.data.file
+                  this.$toast.success('修改成功')
+                  this.closeMarkdownPreview()
+                  Bus.$emit('updateFileList')
+                  this.$toast.success('请重新打开文件')
+                  // this.getMarkdownText()
+                } else {
+                  this.$toast.error(res.message)
+                }
+              })
+              .catch((err) => {
+                this.markdownLoading = false
+                this.$toast.error(err.message)
+              })
+          }).catch(() => {
+            this.$toast.success('取消转存')
+          })
+        } else {
           modifyFileContent({
             fileId: this.currentFileInfo.id ? this.currentFileInfo.id : this.fileInfo.id,
             fileContent: this.markdownText,
@@ -229,9 +325,7 @@ export default {
               if (res.code === 0) {
                 this.currentFileInfo = res.data.file
                 this.$toast.success('修改成功')
-                this.closeMarkdownPreview()
                 Bus.$emit('updateFileList')
-                this.$toast.success('请重新打开文件')
                 // this.getMarkdownText()
               } else {
                 this.$toast.error(res.message)
@@ -241,30 +335,7 @@ export default {
               this.markdownLoading = false
               this.$toast.error(err.message)
             })
-        }).catch(() => {
-          this.$toast.success('取消转存')
-        })
-      } else {
-        modifyFileContent({
-          fileId: this.currentFileInfo.id ? this.currentFileInfo.id : this.fileInfo.id,
-          fileContent: this.markdownText,
-          timestamp: new Date().getTime()
-        })
-          .then((res) => {
-            this.markdownLoading = false
-            if (res.code === 0) {
-              this.currentFileInfo = res.data.file
-              this.$toast.success('修改成功')
-              Bus.$emit('updateFileList')
-              // this.getMarkdownText()
-            } else {
-              this.$toast.error(res.message)
-            }
-          })
-          .catch((err) => {
-            this.markdownLoading = false
-            this.$toast.error(err.message)
-          })
+        }
       }
     },
     /**
@@ -279,6 +350,7 @@ export default {
       this.callback('cancel')
     },
     imgAdd (pos, file) {
+      debugger
       var formData = new FormData()
       formData.append('newImg', file)
       axios({
@@ -339,6 +411,8 @@ export default {
 
       .header-file-name {
         min-width: 30px;
+        max-width: 200px;
+        flex-basis: 200px;
       }
 
       .desc {

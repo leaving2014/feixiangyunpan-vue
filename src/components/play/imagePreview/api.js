@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Viewer from 'viewerjs'
-// import Viewer from 'v-viewer'
 import { assign } from '@/libs/util'
 
 const viewerApi = ({ images = [], options = {} } = {}) => {

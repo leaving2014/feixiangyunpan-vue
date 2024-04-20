@@ -1,55 +1,41 @@
 <template>
-
-  <div
-    class="u-dialog__wrapper dialog-common-header"
-    ref="dialog"
-    style="z-index: 7999"
-  >
+  <div class="u-dialog__wrapper dialog-common-header" ref="dialog" style="z-index: 7999">
     <!--:class="{ 'pop-up': true, show: show }"-->
-    <div
-      class="u-dialog u-dialog__mini"
-      ref="dialog__mini"
-      style="top: 59.5px; width: 440px"
-    >
+    <div class="u-dialog u-dialog__mini" ref="dialog__mini" style="top: 59.5px; width: 440px">
       <!--通用头部-->
       <div class="u-dialog__header">
         <span class="u-dialog__title"> {{ title }}</span>
         <button type="button" aria-label="Close" class="u-dialog__headerbtn">
-          <i
-            class="u-dialog__close u-icon u-icon-close iconfont icon-guanbi"
-            @click="noClick"
-          ></i>
+          <i class="u-dialog__close u-icon u-icon-close iconfont icon-guanbi" @click="noClick"></i>
         </button>
       </div>
       <div class="u-dialog__body u-dialog-copy-move">
         <!--普通确认提示框-->
-        <p class="dialog__delete-tip" v-if="showType === 0" style="margin:20px">{{ msg }}</p>
+        <p class="dialog__delete-tip" v-if="showType === 0" style="margin: 20px">
+          {{ msg }}
+        </p>
         <!--复制移动框-->
-        <div class="folder-selector-dialog__body"
-             v-if="showType === 1 || showType === 2" ref="formRef"
+        <div
+          class="folder-selector-dialog__body"
+          v-if="showType === 1 || showType === 2"
+          ref="formRef"
         >
           <div class="folder-selector-dialog__selector-wrapper">
             <div class="file-selector__body">
               <div class="file-selector__nav">
                 <div class="file-selector__nav-left">
                   <div class="item-group" v-show="fullPath === '/'">
-                    <span class="file-selector__nav-item">{{
-                        getUserInfo.userName
-                      }}</span>
+                    <span class="file-selector__nav-item">{{ getUserInfo.userName }}</span>
                   </div>
                   <div v-if="fullPath !== '/'">
                     <span class="file-selector__nav-item">
-                      <span
-                        class="file-selector__nav-item-title text-ellip"
-                        @click="back()"
+                      <span class="file-selector__nav-item-title text-ellip" @click="back()"
                       >返回上一级</span
                       >
                       <span class="file-selector__nav-item-sep">|</span>
                     </span>
                     <span class="file-selector__nav-item">
-                      <span
-                        class="file-selector__nav-item-title text-ellip"
-                        @click="back('/')"
+                      <span class="file-selector__nav-item-title text-ellip" @click="back('/')"
                       >全部文件
                       </span>
                       <span class="file-selector__nav-item-sep">></span>
@@ -98,12 +84,10 @@
                       class="detail-filename__title-icon img-before-icon iconfont icon-pure-color"
                     />
 
-                    <span
-                      class="detail-filename__title-text inline-block-v-middle text-ellip"
-                    >{{ item.fileName }}</span
-                    >
+                    <span class="detail-filename__title-text inline-block-v-middle text-ellip">{{
+                        item.fileName
+                      }}</span>
                   </div>
-
                 </div>
                 <div class="el-loading-mask" v-show="showLoading">
                   <div class="el-loading-spinner">
@@ -131,7 +115,7 @@
               @input="changeInput($event)"
               ref="renameInputBox"
               autofocus="true"
-              :palceholder="operation === 'offlineDownload' ? '请输入下载网址' : '请输入文件夹名' "
+              :palceholder="operation === 'offlineDownload' ? '请输入下载网址' : '请输入文件夹名'"
               name="renameFileName"
             />
             <!--:value="this.renameFileName"-->
@@ -145,10 +129,7 @@
             <div class="u-tabs__header is-top">
               <div class="u-tabs__nav-wrap is-top">
                 <div class="u-tabs__nav-scroll">
-                  <div
-                    class="u-tabs__nav is-top"
-                    style="transform: translateX(0px)"
-                  >
+                  <div class="u-tabs__nav is-top" style="transform: translateX(0px)">
                     <div
                       class="u-tabs__active-bar is-top"
                       style="width: 28px; transform: translateX(0px)"
@@ -182,9 +163,7 @@
                 <div class="share-file__link">
                   <div class="share-file__link-setting">
                     <div class="share-file__link-expired">
-                      <div
-                        class="share-file__link-expired-label inline-block-v-middle"
-                      >
+                      <div class="share-file__link-expired-label inline-block-v-middle">
                         有效期:
                       </div>
                       <div
@@ -200,14 +179,15 @@
                             class="u-input__inner"
                           />
                           <span class="u-input__suffix">
-                            <span class="u-input__suffix-inner"
-                                  :show="showSelectExpired"
-                                  @click="showSelectExpiredDropdown()">
+                            <span
+                              class="u-input__suffix-inner"
+                              :show="showSelectExpired"
+                              @click="showSelectExpiredDropdown()"
+                            >
                               <i
                                 class="u-select__caret u-input__icon iconfont"
-                                :class="showSelectExpired === true
-                                    ? 'icon-xiangshang'
-                                    : 'icon-xiangxia'
+                                :class="
+                                  showSelectExpired === true ? 'icon-xiangshang' : 'icon-xiangxia'
                                 "
                               >
                               </i>
@@ -228,26 +208,19 @@
                             left: 2px;
                           "
                         >
-                          <div
-                            class="u-scrollbar"
-                            style="background-color: #fff !important"
-                          >
+                          <div class="u-scrollbar" style="background-color: #fff !important">
                             <div
                               class="u-select-dropdown__wrap u-scrollbar__wrap"
                               style="margin-bottom: -6px; margin-right: -6px"
                             >
-                              <ul
-                                class="u-scrollbar__view u-select-dropdown__list"
-                              >
+                              <ul class="u-scrollbar__view u-select-dropdown__list">
                                 <li
                                   class="u-select-dropdown__item hover"
                                   v-for="(item, index) in expiredTimeList"
                                   :index="index"
                                   :key="item.time"
                                   @click="selectExpired(item.time, index)"
-                                  :class="
-                                    item.time === expiredTime ? 'selected' : ''
-                                  "
+                                  :class="item.time === expiredTime ? 'selected' : ''"
                                 >
                                   <span>{{ item.name }}</span>
                                 </li>
@@ -276,17 +249,17 @@
                             value=""
                           />
                         </span>
-                        <span class="u-checkbox__label"
-                        >分享链接自动填充提取码</span
-                        >
+                        <span class="u-checkbox__label">分享链接自动填充提取码</span>
                       </label>
                     </div>
                     <div class="share-file__link-center"></div>
                     <div class="share-file__link-bottom">
                       <div class="share-file__link-copy-wrapper">
-                        <button type="button"
-                                @click="createShare(enableShareCode)"
-                                class="u-button share-file__link-copy u-button--primary u-button--medium is-round">
+                        <button
+                          type="button"
+                          @click="createShare(enableShareCode)"
+                          class="u-button share-file__link-copy u-button--primary u-button--medium is-round"
+                        >
                           <span>创建分享</span>
                         </button>
                       </div>
@@ -304,32 +277,48 @@
                         <!--  wp-share-file__link-info-status-icon -->
                         <!--  inline-block-v-middle "></i>-->
 
-                        <span class="share-file__link-info-status-text inline-block-v-middle">成功创建私密链接</span>
-
+                        <span class="share-file__link-info-status-text inline-block-v-middle"
+                        >成功创建私密链接</span
+                        >
                       </div>
                       <div class="share-file__link-info-url-wrapper">
                         <div class="share-file__link-info-url u-input u-input--small">
-                          <input type="text" readonly="readonly" autocomplete="off"
-                                 id="share-link-input"
-                                 v-model="shareLink"
-                                 class="u-input__inner">
+                          <input
+                            type="text"
+                            readonly="readonly"
+                            autocomplete="off"
+                            id="share-link-input"
+                            v-model="shareLink"
+                            class="u-input__inner"
+                          />
                         </div>
                       </div>
                       <div class="share-file__link-pwd">
                         <div class="share-file__link-pwd-label inline-block-v-middle">提取码</div>
-                        <div class="share-file__link-pwd-val inline-block-v-middle u-input u-input--small">
-                          <input type="text" readonly="readonly"
-                                 v-model="extractionCode"
-                                 autocomplete="off" class="u-input__inner">
+                        <div
+                          class="share-file__link-pwd-val inline-block-v-middle u-input u-input--small"
+                        >
+                          <input
+                            type="text"
+                            readonly="readonly"
+                            v-model="extractionCode"
+                            autocomplete="off"
+                            class="u-input__inner"
+                          />
                         </div>
                       </div>
                       <div class="share-file__link-info-tip">
-                        有效期: <span class="theme-primary-text">{{ expiredTimeList[selectExpiredIndex].name }}</span>
+                        有效期:
+                        <span class="theme-primary-text">{{
+                            expiredTimeList[selectExpiredIndex].name
+                          }}</span>
                       </div>
                       <div class="share-file__link-copy-wrapper">
-                        <button type="button"
-                                @click="copyShareLink()"
-                                class="u-button share-file__link-copy u-button--primary u-button--medium is-round">
+                        <button
+                          type="button"
+                          @click="copyShareLink()"
+                          class="u-button share-file__link-copy u-button--primary u-button--medium is-round"
+                        >
                           <span>{{ enableShareCode ? '复制链接及提取码' : '复制分享链接' }}</span>
                         </button>
                       </div>
@@ -373,7 +362,9 @@
                   : showType === 2
                     ? moveOptinon.yesBtnText
                     : showType === 3
-                      ? operation === 'offlineDownload' ? '创建任务' : renameOption.yesBtnText
+                      ? operation === 'offlineDownload'
+                        ? '创建任务'
+                        : renameOption.yesBtnText
                       : showType === 4
                         ? shareOption.yesBtnText
                         : '确定'
@@ -405,6 +396,9 @@ export default {
       type: Object
     },
     fileName: {
+      type: String
+    },
+    originName: {
       type: String
     },
     title: {
@@ -542,7 +536,6 @@ export default {
         }
         this.timer = setTimeout(() => {
           bus.$on('fileName', (e) => {
-            console.log(e)
             this.renameFileName = e
           })
           this.$refs.renameInputBox.focus()
@@ -569,12 +562,15 @@ export default {
     //   this.getFileList(this.fullPath)
     // },
     show (value) {
+      console.log('showType', this.showType)
+      this.renameFileName = ''
       if (value) {
         if (this.showType === 1 || this.showType === 2) {
           console.log('获取复制移动目录列表')
           this.getFileList('/', false)
         } else if (this.showType === 3) {
-          this.renameFileName = ''
+          this.renameFileName = this.originName
+          // this.$refs.renameInputBox.focus()
         }
       }
       this.shareSuccess = false
@@ -620,12 +616,8 @@ export default {
       // 判断点击导航是否是最后一个,即当前路径,不是最后一个则回退
       if (routerLength - 2 - index !== 0) {
         const pathArr = this.fullPath.split('/')
-        // console.log(pathArr)
-        // console.log('点击跳转目录:' + pathArr[index + 1])
         const targetPath = pathArr[index + 1]
-        // console.log(routerLength)
         let newFullPath = ''
-        // console.log('选中目录索引' + pathArr.indexOf(targetPath))
         for (let i = 0; i < pathArr.indexOf(targetPath) + 1; i++) {
           if (i !== 0) {
             newFullPath = newFullPath + '/' + pathArr[i]
@@ -672,9 +664,6 @@ export default {
         this.fullPath = this.fullPath + '/' + path
       }
       this.currentPath = '/' + path
-      console.log('fullPath:' + this.fullPath)
-      console.log('currentPath:' + this.currentPath)
-      console.log('复制移动目标文件夹=====' + this.fullPath)
       this.resolveData.filePath = this.fullPath
       this.getFileList(this.fullPath, false)
     },
@@ -692,27 +681,18 @@ export default {
       }
       getFileListByPath(data).then((res) => {
         store.commit('updateCopyMovePath', this.fullPath)
-        // console.log(res)
         if (res.code === 0) {
           this.fileList.length = 0
           this.fileList = res.data.list.filter((item) => item.isDir === 1)
           console.log(this.fileList)
           this.showLoading = false
         }
-
-        // this.fileList = res.data.list.filter(item => item.isDir === '1')
-        // console.log('过滤目录')
-        // console.log(this.fileList)
-        // this.sortFileList.length = 0
-        // this.sortFileList = this.fileList.sort(this.compare('isDir', -1))
-        // this.selectedFile = new Array(this.fileList.length).fill(false)
       })
     },
     changeInput (e) {
       if (this.showType === 3) {
         store.commit('updateRenameFileName', this.renameFileName)
       }
-      // this.renameFileName = this.$refs.renameInput.value
     },
     // 选中分享过期时间
     selectExpired (t, index) {
@@ -735,7 +715,7 @@ export default {
     createShare (enableShareCode) {
       var fileId = this.file.id
 
-      var file = store.state.fileList.find(item => item.id === fileId)
+      var file = store.state.fileList.find((item) => item.id === fileId)
       var filelist = store.state.selectFileIdList.map((item) => {
         return {
           fileId: item
@@ -751,7 +731,12 @@ export default {
       shareFile(data).then((res) => {
         if (res.code === 0) {
           if (enableShareCode) {
-            this.shareLink = this.getHostUrl() + '/#/s/' + res.data.batchNum + '?extractionCode=' + res.data.extractionCode
+            this.shareLink =
+              this.getHostUrl() +
+              '/#/s/' +
+              res.data.batchNum +
+              '?extractionCode=' +
+              res.data.extractionCode
           } else {
             this.shareLink = this.getHostUrl() + '/#/s/' + res.data.batchNum
           }
@@ -826,25 +811,25 @@ export default {
 .el-loading-mask {
   position: absolute;
   z-index: 2000;
-  background-color: hsla(0, 0%, 100%, .9);
+  background-color: hsla(0, 0%, 100%, 0.9);
   margin: 0;
   //top: 0;
   //right: 0;
   //bottom: 0;
   //left: 0;
-  transition: opacity .3s;
+  transition: opacity 0.3s;
 }
 
 .el-loading-mask {
   position: absolute;
   z-index: 10000;
-  background-color: hsla(0, 0%, 100%, .9);
+  background-color: hsla(0, 0%, 100%, 0.9);
   margin: 0;
   //top: 0;
   //right: 0;
   //bottom: 0;
   //left: 0;
-  transition: opacity .3s;
+  transition: opacity 0.3s;
 }
 
 .el-loading-mask.is-fullscreen .el-loading-spinner {
@@ -898,291 +883,23 @@ svg:not(:root) {
 }
 
 @keyframes loading-rotate {
-
   to {
-    transform: rotate(1turn)
+    transform: rotate(1turn);
   }
-
 }
 
 @keyframes loading-dash {
   0% {
     stroke-dasharray: 1, 200;
-    stroke-dashoffset: 0
+    stroke-dashoffset: 0;
   }
   50% {
     stroke-dasharray: 90, 150;
-    stroke-dashoffset: -40px
+    stroke-dashoffset: -40px;
   }
   to {
     stroke-dasharray: 90, 150;
-    stroke-dashoffset: -120px
-
+    stroke-dashoffset: -120px;
   }
 }
-
-//.u-dialog__wrapper {
-//  position: fixed;
-//  top: 0;
-//  right: 0;
-//  bottom: 0;
-//  left: 0;
-//  overflow: auto;
-//  background: rgba(0, 0, 0, .3);
-//  margin: 0;
-//  animation-name: dialog-fade-in;
-//
-//  .icon-guanbi:hover {
-//    color: #06a7ff;
-//  }
-//
-//  .u-dialog {
-//    position: relative;
-//    margin: 0 auto;
-//    background: #fff;
-//    border-radius: 12px;
-//    box-shadow: 0 1px 3px rgba(0, 0, 0, .3);
-//    box-sizing: border-box;
-//  }
-//
-//  .u-dialog__header {
-//    height: 48px;
-//    box-sizing: border-box;
-//    padding: 15px 24px;
-//    text-align: left;
-//
-//    .u-dialog__title {
-//      font-size: 14px;
-//      color: #333;
-//      overflow: hidden;
-//      white-space: nowrap;
-//      text-overflow: ellipsis;
-//      max-width: 100%;
-//      line-height: 18px;
-//      font-weight: 700;
-//    }
-//
-//    .u-dialog__headerbtn {
-//      top: 50%;
-//      -webkit-transform: translateY(-50%);
-//      transform: translateY(-50%);
-//      right: 24px;
-//      color: #979797;
-//      position: absolute;
-//      //top: 15px;
-//      right: 24px;
-//      padding: 0;
-//      background: 0 0;
-//      border: none;
-//      outline: 0;
-//      cursor: pointer;
-//      font-size: 16px;
-//    }
-//  }
-//
-//  .u-dialog__body {
-//    padding: 0 24px;
-//    color: #606266;
-//    font-size: 14px;
-//    word-break: break-all;
-//
-//    .dialog__delete-tip {
-//      margin-top: 3.07467vw;
-//      text-align: center;
-//      color: #424e67;
-//    }
-//
-//
-//  }
-//
-//  .u-dialog__footer {
-//    padding: 24px 24px 32px 24px;
-//    box-sizing: border-box;
-//    text-align: center;
-//
-//    .dialog-footer-center {
-//      text-align: center;
-//
-//      .btn-fix-size-middle.u-button {
-//        width: 130px;
-//      }
-//
-//      .second-primary-btn.u-button {
-//        border-width: 0;
-//        background-color: #f0faff;
-//        color: #06a7ff;
-//      }
-//
-//      .u-button--medium, .u-button--medium.is-round {
-//        padding: 10px 36px;
-//      }
-//
-//      .u-button.is-round {
-//        border-radius: 20px;
-//        padding: 12px 36px;
-//      }
-//
-//      .u-button--primary {
-//        color: #fff;
-//        background-color: #06a7ff;
-//        border-color: #06a7ff;
-//      }
-//    }
-//  }
-//}
-//
-//.dialog-fade-enter-active {
-//  -webkit-animation: dialog-fade-in .3s;
-//  animation: dialog-fade-in .3s
-//}
-//
-//.dialog-fade-leave-active {
-//  -webkit-animation: dialog-fade-out .3s;
-//  animation: dialog-fade-out .3s
-//}
-//
-//@-webkit-keyframes dialog-fade-in {
-//  0% {
-//    transform: translate3d(0, -20px, 0);
-//    opacity: 0
-//  }
-//
-//  to {
-//    transform: translateZ(0);
-//    opacity: 1
-//  }
-//}
-//
-//@keyframes dialog-fade-in {
-//  0% {
-//    transform: translate3d(0, -20px, 0);
-//    opacity: 0
-//  }
-//
-//  to {
-//    transform: translateZ(0);
-//    opacity: 1
-//  }
-//}
-//
-//@-webkit-keyframes dialog-fade-out {
-//  0% {
-//    transform: translateZ(0);
-//    opacity: 1
-//  }
-//
-//  to {
-//    transform: translate3d(0, -20px, 0);
-//    opacity: 0
-//  }
-//}
-//
-//@keyframes dialog-fade-out {
-//  0% {
-//    transform: translateZ(0);
-//    opacity: 1
-//  }
-//
-//  to {
-//    transform: translate3d(0, -20px, 0);
-//    opacity: 0
-//  }
-//}
-//
-//
-//.dialog-common-header .u-dialog, .dialog-common-header .u-dialog > .u-loading__mask {
-//  border-radius: 12px
-//}
-//
-//.dialog-common-header .u-dialog__header {
-//  -webkit-box-shadow: 0 1px 0 0 #f5f6fa;
-//  box-shadow: 0 1px 0 0 #f5f6fa;
-//  position: relative;
-//  font-weight: 700;
-//  border: none
-//}
-//
-//.dialog-common-header .u-dialog__headerbtn {
-//  right: 24px;
-//  color: #979797
-//}
-//
-//.dialog-common-header .u-dialog__title {
-//  font-size: 14px;
-//  color: #333;
-//  overflow: hidden;
-//  white-space: nowrap;
-//  text-overflow: ellipsis;
-//  max-width: 100%
-//}
-//
-//.dialog-common-header .u-dialog__headerbtn {
-//  top: 50%;
-//  -webkit-transform: translateY(-50%);
-//  transform: translateY(-50%)
-//}
-//
-//.dialog-footer-center {
-//  text-align: center
-//}
-//
-//.dialog-common-footer .u-button + .u-button {
-//  margin-left: 24px
-//}
-//
-//.dialog-common-body {
-//  margin-top: 32px;
-//  text-align: center;
-//  color: #424e67
-//}
-//
-//.plain-primary-btn.u-button--primary:hover {
-//  background-color: #edf8ff;
-//  border-color: #09aaff
-//}
-//
-//.plain-primary-btn.u-button--plain:hover {
-//  opacity: .8
-//}
-//
-//.common-btn {
-//  border-radius: 24px;
-//  font-size: 12px;
-//  font-weight: 700;
-//  position: relative
-//}
-//
-//.common-btn .iconfont {
-//  font-size: 12px
-//}
-//
-//.reverse-btn {
-//  color: #fff;
-//  background: #06a7ff;
-//  border-color: #06a7ff
-//}
-//
-//.reverse-btn.u-button--primary {
-//  background-color: #06a7ff;
-//  color: #f0faff
-//}
-//
-//.reverse-btn.u-button--primary:hover {
-//  background-color: #06a7ff;
-//  color: #f0faff;
-//  opacity: .8
-//}
-//
-//.reverse-btn.u-button--plain {
-//  background-color: #f0faff;
-//  color: #06a7ff
-//}
-//
-//.reverse-btn.u-button--plain:hover {
-//  opacity: .8
-//}
-//
-//.button-text__primary.u-button {
-//  color: #06a7ff
-//}
 </style>

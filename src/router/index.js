@@ -41,6 +41,19 @@ const routes = [
         props: true
       },
       {
+        path: '/notes',
+        name: 'Notes',
+        component: () =>
+          import(/* webpackChunkName: "notes" */ '@/views/Notes.vue'),
+        meta: {
+          title: '在线笔记',
+          requireAuth: true, //  当前路由是否需要登录才可进入
+          content: {
+            description: '在线笔记'
+          }
+        }
+      },
+      {
         path: '/recycle',
         name: 'Recycle',
         component: () =>

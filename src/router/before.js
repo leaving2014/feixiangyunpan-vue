@@ -4,8 +4,6 @@ import config from '@/config/index.js'
 import globalFunction from '@/libs/globalFunction.js'
 // 路由全局前置守卫
 router.beforeEach((to, from, next) => {
-  // console.log('to', to + ' ========= from' + from)
-
   // 管理员
   // if (to.path.includes('manage')) {
   //   if (

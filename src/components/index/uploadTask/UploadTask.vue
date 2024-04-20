@@ -132,7 +132,6 @@ export default {
         // 服务器分片校验函数，秒传及断点续传基础
         checkChunkUploadedByResponse: function(chunk, message) {
           const objMessage = JSON.parse(message)
-          console.log('objMessage', objMessage)
           if (objMessage.code === 0) {
             const data = objMessage.data
             if (data.skipUpload) {

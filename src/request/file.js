@@ -33,6 +33,10 @@ export const getOfflineFileList = (p) => get('/file/list/offline', p)
 export const getFileInfo = (p) => get('/file/info', p)
 // 获取回收站文件列表
 export const getRecoveryFile = (p) => get('/recycle/list', p)
+// 获取笔记文件列表
+export const getNotesFileList = (p) => get('/notes/list', p)
+// 修改文档内容
+export const modifyDocument = (p) => post('/notes/modify', p, true)
 // 获取我已分享的文件列表
 export const getMyShareFileList = (p) => get('/share/shareList', p)
 // 获取存储占用
@@ -107,6 +111,10 @@ export const clearRecoveryFile = (p) => post('/recycle/clearall', p)
  */
 // 文件预览
 export const getFilePreview = (p) => get('/filetransfer/preview/document', p)
+// 获取在线文档内容
+export const loadDocument = (p) => get('/notes/load', p)
+export const loadDocInfo = (p) => get('/notes/info', p)
+export const addDocument = (p) => post('/notes/add', p, true)
 // 文件修改
 export const modifyFileContent = (p) => post('/file/update', p)
 

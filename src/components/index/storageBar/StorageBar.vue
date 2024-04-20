@@ -101,6 +101,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@media (max-height: 650px) {
+  .aside-nav__quota-wrapper {
+    display: none !important;
+  }
+}
+
 .aside-nav__sub-bottom {
   position: absolute;
   bottom: 25px;

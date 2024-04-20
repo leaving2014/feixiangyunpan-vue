@@ -1,9 +1,7 @@
 <template>
-  <div class="main-list" :style="{'overflow':showMarkdown? 'hidden':'auto'}">
+  <div class="main-list" style="overflow: hidden">
     <div class="file-list-toolbar__wrapper">
-      <div
-        class="nd-file-list-toolbar nd-file-list-toolbar__actions inline-block-v-middle"
-      >
+      <div class="nd-file-list-toolbar nd-file-list-toolbar__actions inline-block-v-middle">
         <!--上传-->
         <a
           class="upload-button upload_wrapper"
@@ -18,11 +16,7 @@
             <i class="iconfont icon-shangchuan"></i>
             <span class="upload_text" @click="handleUploadFileBtnClick(1)">上传</span>
           </button>
-          <ul
-            class="dropdown-list nd-common-float-menu"
-            style="display: none"
-            ref="dropdown"
-          >
+          <ul class="dropdown-list nd-common-float-menu" style="display: none" ref="dropdown">
             <li
               id="menu_uploader-file"
               class="sub cursor-p upload-wrapper"
@@ -47,7 +41,10 @@
           </ul>
         </a>
         <!--默认功能条-->
-        <div class="btn-group inline-block-v-middle theme-primary-text" v-if="this.selectedFileCount===0">
+        <div
+          class="btn-group inline-block-v-middle theme-primary-text"
+          v-if="this.selectedFileCount === 0"
+        >
           <button
             type="button"
             class="u-button toolbar-item is-need-left-sep"
@@ -93,21 +90,21 @@
         <!--选中文件功能梯条-->
         <div class="btn-group inline-block-v-middle theme-primary-text" v-else>
           <!--下载-->
-          <button
-            type="button"
-            class="u-button toolbar-item is-need-left-sep"
-          >
-            <a :href="getDownloadFilePath(this.fileList[this.selectFileIndex])"
-               class="theme-primary-text">
+          <button type="button" class="u-button toolbar-item is-need-left-sep">
+            <a
+              :href="getDownloadFilePath(this.fileList[this.selectFileIndex])"
+              class="theme-primary-text"
+            >
               <i class="iconfont icon-xiazai"></i>
               <span class="toolbar_text theme-primary-text">下载</span>
             </a>
           </button>
           <!--重命名-->
-          <button class="u-button toolbar-item is-need-left-sep"
-                  v-show="this.selectedFileCount === 1"
-                  type="button"
-                  @click="renameFile"
+          <button
+            class="u-button toolbar-item is-need-left-sep"
+            v-show="this.selectedFileCount === 1"
+            type="button"
+            @click="renameFile"
           >
             <i class="iconfont icon-zhongmingming"></i>
             <span class="toolbar_text">重命名</span>
@@ -139,9 +136,16 @@
           />
           <span class="u-input__suffix">
             <span class="u-input__suffix-inner">
-              <i class="iconfont icon-sousuo" v-if="$route.query.search === undefined" @click="search"></i>
-              <i class="iconfont icon-guanbi" v-if="$route.query.search !== undefined"
-                 @click="back('/'), searchKeyWords=''"></i>
+              <i
+                class="iconfont icon-sousuo"
+                v-if="$route.query.search === undefined"
+                @click="search"
+              ></i>
+              <i
+                class="iconfont icon-guanbi"
+                v-if="$route.query.search !== undefined"
+                @click="back('/'), (searchKeyWords = '')"
+              ></i>
             </span>
           </span>
         </div>
@@ -164,50 +168,44 @@
             <span
               class="file-selector__nav-item-title text-ellip"
               @click="back('/')"
-              :style="{'color':$route.query.search !== undefined? '#06a7ff !important':''}"
+              :style="{ color: $route.query.search !== undefined ? '#06a7ff !important' : '' }"
             >全部文件
             </span>
-            <span class="file-selector__nav-item-sep"
-            >></span>
+            <span class="file-selector__nav-item-sep">></span>
             <!--搜索导航显示-->
-          <span class="file-selector__nav-item" v-if="searchKeyWords !== ''">
-            <span class="file-selector__nav-item-sep" style="display: inline-block"
-            >></span>
-            <span
-              class="file-selector__nav-item-title text-ellip is-current-nav">搜索:
-              {{ searchKeyWords }}
+            <span class="file-selector__nav-item" v-if="searchKeyWords !== ''">
+              <span class="file-selector__nav-item-sep" style="display: inline-block">></span>
+              <span class="file-selector__nav-item-title text-ellip is-current-nav"
+              >搜索:
+                {{ searchKeyWords }}
+              </span>
             </span>
           </span>
-          </span>
-          <template v-if="this.$route.query.filePath!== undefined">
+          <template v-if="this.$route.query.filePath !== undefined">
             <span
               class="file-selector__nav-item"
               v-for="(item, index) in this.$route.query.filePath.split('/').slice(1)"
               :key="item"
             >
-            <span
-              class="file-selector__nav-item-title text-ellip is-current-nav"
-              :path="fullPath.split('/')"
-              @click="navigate(index)"
-              :index="index"
-            >{{ item }}</span
-            >
-            <span class="file-selector__nav-item-sep">></span>
-          </span>
+              <span
+                class="file-selector__nav-item-title text-ellip is-current-nav"
+                :path="fullPath.split('/')"
+                @click="navigate(index)"
+                :index="index"
+              >{{ item }}</span
+              >
+              <span class="file-selector__nav-item-sep">></span>
+            </span>
           </template>
-
-
         </div>
         <div v-if="$route.path === '/index'">
-          <span class="title">{{
-              this.getIndexPageTitle($route.query.category)
-            }}</span>
+          <span class="title">{{ this.getIndexPageTitle($route.query.category) }}</span>
         </div>
       </div>
       <!--导航条右-->
       <div class="file-main__nav-right">
         <span class="file-main__nav-right-count">
-          <template v-if="auditCount>0">
+          <template v-if="auditCount > 0">
             已加载{{ this.sortFileList ? this.sortFileList.length : 0 }}个, {{ auditCount }}个未审核
           </template>
           <template v-else>
@@ -216,31 +214,26 @@
         </span>
         <i
           class="iconfont cursor-p file-main__nav-right-icon inline-block-v-middle"
-          :class="
-            displayMode === 'block'
-              ? 'icon-xianshifangshi_lie'
-              : 'icon-xianshifangshi_kuai'
-          "
+          :class="displayMode === 'block' ? 'icon-xianshifangshi_lie' : 'icon-xianshifangshi_kuai'"
           @click="selectDisplayMode(displayMode)"
         ></i>
-        <i class="iconfont icon-shuaxin cursor-p file-main__nav-right-icon inline-block-v-middle"
-           @click="refreshFileList" style="margin-left: 5px" title="刷新文件列表"></i>
+        <i
+          class="iconfont icon-shuaxin cursor-p file-main__nav-right-icon inline-block-v-middle"
+          @click="refreshFileList"
+          style="margin-left: 5px"
+          title="刷新文件列表"
+        ></i>
       </div>
     </div>
     <!--文件显示  缩略图显示-->
-    <div class="file-grid-list clearfix main-list__grid"
-         v-show="displayMode === 'block'"
-    >
+    <div class="file-grid-list clearfix main-list__grid" v-show="displayMode === 'block'">
       <!--文件选择提示-->
       <div class="file-grid-list__nav">
         <label
           class="u-checkbox nd-file-grid-list__select-all"
           :class="selectAllFiles === true ? 'is-checked' : ''"
         >
-          <span
-            class="u-checkbox__input"
-            :class="selectAllFiles === true ? 'is-checked' : ''"
-          >
+          <span class="u-checkbox__input" :class="selectAllFiles === true ? 'is-checked' : ''">
             <span class="u-checkbox__inner"></span>
             <input
               type="checkbox"
@@ -275,23 +268,23 @@
       </div>
       <!-- -->
       <!--文件显示列表  缩略图显示-->
-      <div class="file-grid-list__body show-mode-block mouse-choose-list"
-           v-contextmenu:contextmenu
-           style="">
-        <div class="mouse-choose-box"
-             style="
+      <div
+        class="file-grid-list__body show-mode-block mouse-choose-list"
+        v-contextmenu:contextmenu
+        style=""
+      >
+        <div
+          class="mouse-choose-box"
+          style="
             padding-top: 0px;
-            padding-bottom: 20px;
+            padding-bottom: 0px;
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-start;
           "
         >
           <!--新建文件夹编辑-->
-          <div
-            class="grid-list__item text-center edit-mode"
-            v-if="showCreateFolder"
-          >
+          <div class="grid-list__item text-center edit-mode" v-if="showCreateFolder">
             <div class="grid-list__title-edit-action">
               <div
                 class="grid-list__title-edit-action--btn is-confirm inline-block-v-middle cursor-p"
@@ -303,8 +296,7 @@
               >
                 <i
                   class="iconfont icon-guanbi"
-                  @click="function () { showCreateFolder = false}
-                  "
+                  @click="function () {showCreateFolder = false}"
                 ></i>
               </div>
             </div>
@@ -345,9 +337,7 @@
               <label
                 class="u-checkbox"
                 :id="selectedFile[index] === true ? 'is-checked' : ''"
-                :class="[
-                  selectedFile[index] === true ? 'is-checked' : ''
-                ]"
+                :class="[selectedFile[index] === true ? 'is-checked' : '']"
               >
                 <span
                   class="u-checkbox__input"
@@ -356,10 +346,7 @@
                     selectAllFiles === true ? 'is-checked' : ''
                   ]"
                 >
-                  <span
-                    class="u-checkbox__inner"
-                    @click.stop="selectFile(index, $event)"
-                  ></span>
+                  <span class="u-checkbox__inner" @click.stop="selectFile(index, $event)"></span>
                   <!--@click.stop="selectFile(index, $event)"-->
                   <input
                     type="checkbox"
@@ -381,14 +368,7 @@
             </div>
             <!--文件显示主体-->
             <!--clickActions(getClickFileType(item) !== undefined?getClickFileType(item):'' ,-->
-            <div
-              draggable="true"
-              @click="
-                clickActions(index,
-                  item,e
-                )
-              "
-            >
+            <div draggable="true" @click="clickActions(index, item, e)">
               <div class="file-list-drag-copy">
                 <div class="file-list-drag-copy__item is-id-1">
                   <!--<i class="iconfont icon-wenjianjia1"></i>-->
@@ -403,14 +383,16 @@
                 </div>
               </div>
               <div class="grid-list__item-icon-wrapper">
-                <img v-if="item.fileType === 1"
-                     :data-source="getRowImageSrc(item)"
-                     class="nd-grid-list__item-icon img-before-icon iconfont icon-pure-color"
-                     :src="setFileImg(item)"
+                <img
+                  v-if="item.fileType === 1"
+                  :data-source="getRowImageSrc(item)"
+                  class="nd-grid-list__item-icon img-before-icon iconfont icon-pure-color"
+                  :src="setFileImg(item)"
                 />
-                <img v-else
-                     class="nd-grid-list__item-icon img-before-icon iconfont icon-pure-color"
-                     :src="setFileImg(item)"
+                <img
+                  v-else
+                  class="nd-grid-list__item-icon img-before-icon iconfont icon-pure-color"
+                  :src="setFileImg(item)"
                 />
               </div>
               <div class="u-tooltip">
@@ -426,22 +408,22 @@
           </div>
         </div>
       </div>
-
     </div>
 
     <!--文件显示 列表显示-->
-    <div class="main-filelist main-list__table"
-         v-show="displayMode === 'list'"
-         v-contextmenu:contextmenu
+    <div
+      class="main-filelist main-list__table"
+      v-show="displayMode === 'list'"
+      v-contextmenu:contextmenu
     >
       <div class="table is-show-header">
         <div class="table__header">
           <table class="table__header-table">
             <colgroup>
-              <col width="4%">
-              <col width="47%">
-              <col width="22%">
-              <col width="20%">
+              <col width="4%" />
+              <col width="47%" />
+              <col width="22%" />
+              <col width="20%" />
             </colgroup>
             <thead>
             <tr class="table__header-row">
@@ -465,48 +447,73 @@
                     </span>
                   <span class="u-checkbox__label title">{{
                       this.selectedFileCount > 0
-                        ? '已选择' +
-                        `${this.selectedFileCount}` +
-                        '个文件/文件夹'
+                        ? '已选择' + `${this.selectedFileCount}` + '个文件/文件夹'
                         : ''
                     }}</span>
                 </label>
               </th>
               <th class="table__header-th is-name">
                 <div class="text-ellip content inline-block-v-middle">
-                  <span v-show="this.selectedFileCount ===0" class="title" @click="changeOrder('fileName')">文件名</span>
-                  <div class="nd-sort" v-show="orderColumn=='fileName' && selectedFileCount < 1"
-                       @click="changeOrder('fileName')">
-                    <i class="iconfont icon icon-shangsanjiaoxing"
-                       :class="order==='asc'?'active':''"></i>
-                    <i class="iconfont icon icon-xiasanjiaoxing"
-                       :class="order==='desc'?'active':''"></i>
+                    <span
+                      v-show="this.selectedFileCount === 0"
+                      class="title"
+                      @click="changeOrder('fileName')"
+                    >文件名</span
+                    >
+                  <div
+                    class="nd-sort"
+                    v-show="orderColumn == 'fileName' && selectedFileCount < 1"
+                    @click="changeOrder('fileName')"
+                  >
+                    <i
+                      class="iconfont icon icon-shangsanjiaoxing"
+                      :class="order === 'asc' ? 'active' : ''"
+                    ></i>
+                    <i
+                      class="iconfont icon icon-xiasanjiaoxing"
+                      :class="order === 'desc' ? 'active' : ''"
+                    ></i>
                   </div>
                 </div>
               </th>
               <th class="table__header-th">
                 <div class="text-ellip content inline-block-v-middle">
                   <span class="title" @click="changeOrder('fileUpdateTime')">修改时间</span>
-                  <div class="nd-sort" v-show="orderColumn=='fileUpdateTime'" @click="changeOrder('fileUpdateTime')">
-                    <i class="iconfont icon icon-shangsanjiaoxing"
-                       :class="order==='asc'?'active':''"></i>
-                    <i class="iconfont icon icon-xiasanjiaoxing"
-                       :class="order==='desc'?'active':''"></i>
+                  <div
+                    class="nd-sort"
+                    v-show="orderColumn == 'fileUpdateTime'"
+                    @click="changeOrder('fileUpdateTime')"
+                  >
+                    <i
+                      class="iconfont icon icon-shangsanjiaoxing"
+                      :class="order === 'asc' ? 'active' : ''"
+                    ></i>
+                    <i
+                      class="iconfont icon icon-xiasanjiaoxing"
+                      :class="order === 'desc' ? 'active' : ''"
+                    ></i>
                   </div>
                 </div>
               </th>
               <th class="table__header-th">
                 <div class="text-ellip content inline-block-v-middle">
                   <span class="title" @click="changeOrder('fileSize')">大小</span>
-                  <div class="nd-sort" v-show="orderColumn=='fileSize'" @click="changeOrder('fileSize')">
-                    <i class="iconfont icon icon-shangsanjiaoxing"
-                       :class="order==='asc'?'active':''"></i>
-                    <i class="iconfont icon icon-xiasanjiaoxing"
-                       :class="order==='desc'?'active':''"></i>
+                  <div
+                    class="nd-sort"
+                    v-show="orderColumn == 'fileSize'"
+                    @click="changeOrder('fileSize')"
+                  >
+                    <i
+                      class="iconfont icon icon-shangsanjiaoxing"
+                      :class="order === 'asc' ? 'active' : ''"
+                    ></i>
+                    <i
+                      class="iconfont icon icon-xiasanjiaoxing"
+                      :class="order === 'desc' ? 'active' : ''"
+                    ></i>
                   </div>
                 </div>
               </th>
-
             </tr>
             </thead>
           </table>
@@ -515,62 +522,62 @@
         <div class="table__body mouse-choose-list">
           <table class="table__body-table mouse-choose-box">
             <colgroup>
-              <col width="4%">
-              <col width="47%">
-              <col width="22%">
-              <col width="20%">
+              <col width="4%" />
+              <col width="47%" />
+              <col width="22%" />
+              <col width="20%" />
             </colgroup>
             <tbody>
             <!--新建文件夹-->
-            <tr class="table__body-row  mouse-choose-item" v-if="showCreateFolder">
+            <tr class="table__body-row mouse-choose-item" v-if="showCreateFolder">
               <td class="text-center is-select">
-                <label
-                  class="u-checkbox is-disabled"
-                >
-                <span
-                  class="u-checkbox__input"
-                >
-                  <span
-                    class="u-checkbox__inner"
-                  ></span>
-                  <!--@click.stop="selectFile(index, $event)"-->
-                  <input
-                    type="checkbox"
-                    aria-hidden="false"
-                    class="u-checkbox__original"
-                    value=""
-                  />
-                </span>
+                <label class="u-checkbox is-disabled">
+                    <span class="u-checkbox__input">
+                      <span class="u-checkbox__inner"></span>
+                      <!--@click.stop="selectFile(index, $event)"-->
+                      <input
+                        type="checkbox"
+                        aria-hidden="false"
+                        class="u-checkbox__original"
+                        value=""
+                      />
+                    </span>
                 </label>
               </td>
               <!--文件名-->
-              <td class="text-ellip table__td"
-              >
+              <td class="text-ellip table__td">
                 <div class="list-name cursor-p">
                   <div>
                     <img
                       class="list-name__title-icon img-before-icon iconfont icon-pure-color"
                       src="@/assets/files/folder.png"
                     />
-                    <div class="list-name__title-edit-input u-input u-input--small inline-block-v-middle">
-                      <input type="text" class="u-input__inner inline-block-v-middle"
-                             @keyup.enter="createFolderAction"
-                             autofocus="autofocus"
-                             v-model="createFolderName"
-                             autocomplete="off"
-                             ref="createFolderInput">
+                    <div
+                      class="list-name__title-edit-input u-input u-input--small inline-block-v-middle"
+                    >
+                      <input
+                        type="text"
+                        class="u-input__inner inline-block-v-middle"
+                        @keyup.enter="createFolderAction"
+                        autofocus="autofocus"
+                        v-model="createFolderName"
+                        autocomplete="off"
+                        ref="createFolderInput"
+                      />
                     </div>
-                    <div class="nd-list-name__title-edit-action is-confirm inline-block-v-middle cursor-p">
+                    <div
+                      class="nd-list-name__title-edit-action is-confirm inline-block-v-middle cursor-p"
+                    >
                       <i class="iconfont icon-duihao" @click="createFolderAction"></i>
                     </div>
-                    <div class="nd-list-name__title-edit-action is-cancel inline-block-v-middle cursor-p">
+                    <div
+                      class="nd-list-name__title-edit-action is-cancel inline-block-v-middle cursor-p"
+                    >
                       <i
                         class="iconfont icon-guanbi"
-                        @click="function () { showCreateFolder = false}
-                  "
+                        @click="function () {showCreateFolder = false}"
                       ></i>
                     </div>
-
                   </div>
                 </div>
               </td>
@@ -578,16 +585,31 @@
               <td class="text-ellip nd-table__td normal-column">
                 <div class="file-list-time-column">
                   <p class="column-content-hide">
-                    {{ new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() + ' ' + new
-                  Date().getHours() + ':' + new Date().getMinutes()
-                    }}</p>
+                    {{
+                      new Date().getFullYear() +
+                      '-' +
+                      (new Date().getMonth() + 1) +
+                      '-' +
+                      new Date().getDate() +
+                      ' ' +
+                      new Date().getHours() +
+                      ':' +
+                      new Date().getMinutes()
+                    }}
+                  </p>
                   <div class="nd-file-list__line-action theme-primary-text column-content-show">
-                    <i title="分享"
-                       class="inline-block-v-middle cursor-p u-icon file-list__line-action-item u-icon-share"></i>
-                    <i title="下载"
-                       class="inline-block-v-middle cursor-p u-icon file-list__line-action-item u-icon-share"></i>
-                    <i title="更多"
-                       class="inline-block-v-middle cursor-p u-icon file-list__line-action-item u-icon-share"></i>
+                    <i
+                      title="分享"
+                      class="inline-block-v-middle cursor-p u-icon file-list__line-action-item u-icon-share"
+                    ></i>
+                    <i
+                      title="下载"
+                      class="inline-block-v-middle cursor-p u-icon file-list__line-action-item u-icon-share"
+                    ></i>
+                    <i
+                      title="更多"
+                      class="inline-block-v-middle cursor-p u-icon file-list__line-action-item u-icon-share"
+                    ></i>
                   </div>
                 </div>
               </td>
@@ -599,65 +621,67 @@
               </td>
             </tr>
             <!--@contextmenu.prevent="openMenu($event, item, index)"-->
-            <tr :data-id="item.id" class="table__body-row  mouse-choose-item"
-                :class="selectedFile[index] === true ? 'is-checked' : ''"
-                v-contextmenu:contextmenu
-                @contextmenu.prevent="showContentMenuType(index)"
-                :index="index"
-                :fid="item.id"
-                :key="'id' + index"
-                :id="'fid' + item.id"
-                v-for="(item,index) in sortFileList">
+            <tr
+              :data-id="item.id"
+              class="table__body-row mouse-choose-item"
+              :class="selectedFile[index] === true ? 'is-checked' : ''"
+              v-contextmenu:contextmenu
+              @contextmenu.prevent="showContentMenuType(index)"
+              :index="index"
+              :fid="item.id"
+              :key="'id' + index"
+              :id="'fid' + item.id"
+              v-for="(item, index) in sortFileList"
+            >
               <td class="text-center is-select">
                 <label
                   class="u-checkbox"
                   :id="selectedFile[index] === true ? 'is-checked' : ''"
                   :class="[
-                  selectedFile[index] === true ? 'is-checked' : '',
-                  selectedFile[index] === true ? 'is-checked' : ''
-                ]"
+                      selectedFile[index] === true ? 'is-checked' : '',
+                      selectedFile[index] === true ? 'is-checked' : ''
+                    ]"
                 >
-                <span
-                  class="u-checkbox__input"
-                  :class="[
-                    selectedFile[index] === true ? 'is-checked' : '',
-                    selectAllFiles === true ? 'is-checked' : ''
-                  ]"
-                >
-                  <span
-                    class="u-checkbox__inner"
-                    @click.stop="selectFile(index, $event)"
-                  ></span>
-                  <!--@click.stop="selectFile(index, $event)"-->
-                  <input
-                    type="checkbox"
-                    aria-hidden="false"
-                    class="u-checkbox__original"
-                    value=""
-                  />
-                </span>
+                    <span
+                      class="u-checkbox__input"
+                      :class="[
+                        selectedFile[index] === true ? 'is-checked' : '',
+                        selectAllFiles === true ? 'is-checked' : ''
+                      ]"
+                    >
+                      <span
+                        class="u-checkbox__inner"
+                        @click.stop="selectFile(index, $event)"
+                      ></span>
+                      <!--@click.stop="selectFile(index, $event)"-->
+                      <input
+                        type="checkbox"
+                        aria-hidden="false"
+                        class="u-checkbox__original"
+                        value=""
+                      />
+                    </span>
                 </label>
               </td>
               <!--文件名-->
-              <td class="text-ellip table__td"
-                  @click="clickActions(
-                   index,
-                  item
-                )"
-              >
+              <td class="text-ellip table__td" @click="clickActions(index, item)">
                 <div class="list-name cursor-p">
                   <div class="pointer-events-all cursor-p">
-                    <img v-if="item.fileType === 1"
-                         :data-source="getRowImageSrc(item)"
-                         class="list-name__title-icon img-before-icon iconfont icon-pure-color"
-                         :src="setFileImg(item)"
+                    <img
+                      v-if="item.fileType === 1"
+                      :data-source="getRowImageSrc(item)"
+                      class="list-name__title-icon img-before-icon iconfont icon-pure-color"
+                      :src="setFileImg(item)"
                     />
-                    <img v-else
-                         class="list-name__title-icon img-before-icon iconfont icon-pure-color"
-                         :src="setFileImg(item)"
+                    <img
+                      v-else
+                      class="list-name__title-icon img-before-icon iconfont icon-pure-color"
+                      :src="setFileImg(item)"
                     />
-                    <a :title="item.fileName"
-                       class="list-name__title-text inline-block-v-middle text-ellip">
+                    <a
+                      :title="item.fileName"
+                      class="list-name__title-text inline-block-v-middle text-ellip"
+                    >
                       {{ item.fileName }}
                     </a>
                   </div>
@@ -668,21 +692,25 @@
                 <div class="file-list-time-column">
                   <p class="column-content-hide">{{ item.fileUpdateTime }}</p>
                   <div class="nd-file-list__line-action theme-primary-text column-content-show">
-                    <i title="分享"
-                       class="inline-block-v-middle cursor-p u-icon file-list__line-action-item u-icon-share"></i>
-                    <i title="下载"
-                       class="inline-block-v-middle cursor-p u-icon file-list__line-action-item u-icon-share"></i>
-                    <i title="更多"
-                       class="inline-block-v-middle cursor-p u-icon file-list__line-action-item u-icon-share"></i>
+                    <i
+                      title="分享"
+                      class="inline-block-v-middle cursor-p u-icon file-list__line-action-item u-icon-share"
+                    ></i>
+                    <i
+                      title="下载"
+                      class="inline-block-v-middle cursor-p u-icon file-list__line-action-item u-icon-share"
+                    ></i>
+                    <i
+                      title="更多"
+                      class="inline-block-v-middle cursor-p u-icon file-list__line-action-item u-icon-share"
+                    ></i>
                   </div>
                 </div>
               </td>
               <!--大小-->
               <td class="text-ellip nd-table__td normal-column">
                 <section>
-                <span v-if="item.isDir === 0">{{
-                    item.fileSize | storageTrans
-                  }}</span>
+                  <span v-if="item.isDir === 0">{{ item.fileSize | storageTrans }}</span>
                   <span v-else>-</span>
                 </section>
               </td>
@@ -691,12 +719,9 @@
           </table>
         </div>
         <!--无文件显示-->
-        <div class="table__body-empty" style="display: none">
-
-        </div>
+        <div class="table__body-empty" style="display: none"></div>
       </div>
     </div>
-
 
     <Loading v-show="showLoading" :text="this.loadingText"></Loading>
     <!--文件详情-->
@@ -722,23 +747,25 @@
     <!--  </uploader>-->
     <!--</div>-->
 
-
     <v-contextmenu class="contextmenu" ref="contextmenu" style="width: 120px">
       <!--空白处菜单-->
-      <template v-if="selectedFileCount===0">
+      <template v-if="selectedFileCount === 0">
         <v-contextmenu-submenu title="查看">
           <v-contextmenu-item class="contextmenu-item" @click="selectDisplayMode(displayMode)">
-            <span class="menu__item-select-icon inline-block-v-middle"
-                  v-show="displayMode === 'list'"
-                  :class="displayMode === 'list' ? 'active': ''">
+            <span
+              class="menu__item-select-icon inline-block-v-middle"
+              v-show="displayMode === 'list'"
+              :class="displayMode === 'list' ? 'active' : ''"
+            >
             </span>
             <span class="menu-text">列表</span>
           </v-contextmenu-item>
-          <v-contextmenu-item class="contextmenu-item"
-                              @click="selectDisplayMode(displayMode)">
-            <span class="menu__item-select-icon inline-block-v-middle"
-                  v-show="displayMode === 'block'"
-                  :class="displayMode === 'block' ? 'active': ''">
+          <v-contextmenu-item class="contextmenu-item" @click="selectDisplayMode(displayMode)">
+            <span
+              class="menu__item-select-icon inline-block-v-middle"
+              v-show="displayMode === 'block'"
+              :class="displayMode === 'block' ? 'active' : ''"
+            >
             </span>
             <span class="menu-text">缩略图</span>
           </v-contextmenu-item>
@@ -749,46 +776,51 @@
       </template>
 
       <!--单文件右键菜单-->
-      <template v-if="selectedFileCount===1">
+      <template v-if="selectedFileCount === 1">
         <v-contextmenu-item
           @click="menuMethods(item.methodName)"
           style="margin: 3px 0"
           v-for="item in singleMenuList"
-          :key="item.id">
-          <i class="iconfont v-contextmenu-submenu__icon"
-             :class="item.iconClassName"></i>
+          :key="item.id"
+        >
+          <i class="iconfont v-contextmenu-submenu__icon" :class="item.iconClassName"></i>
           {{ item.name }}
         </v-contextmenu-item>
         <!--解压文件-->
         <v-contextmenu-submenu
-          style="margin: 3px 0;position: relative" title="解压文件"
+          style="margin: 3px 0; position: relative"
+          title="解压文件"
           class="unzip-menu"
           @click="unzip(selectFileIndex)"
-          v-if="this.fileList[this.selectFileIndex].fileExt==='zip'">
+          v-if="this.fileList[this.selectFileIndex].fileExt === 'zip'"
+        >
           <!--<v-contextmenu-submenu__icon class="iconfont icon-jieyasuo"></v-contextmenu-submenu__icon>-->
-          <span class="iconfont icon-jieyasuo menu__item-select-icon  inline-block-v-middle ">
-            </span>
+          <span class="iconfont icon-jieyasuo menu__item-select-icon inline-block-v-middle"> </span>
           <!--<i class="iconfont icon-jieyasuo v-contextmenu-submenu__icon"-->
           <!--   style="font-size: 14px;position: absolute;left: 0px">-->
           <!--</i>-->
           <!--解压缩-->
-          <v-contextmenu-item class="contextmenu-item" @click="unzip(fileList[selectFileIndex],1)">
+          <v-contextmenu-item class="contextmenu-item" @click="unzip(fileList[selectFileIndex], 1)">
             <!--<i class="iconfont icon-jieyasuo1 v-contextmenu-submenu__icon"-->
             <!--   style="font-size: 14px">-->
             <!--</i>-->
-            <span class="iconfont icon-jieyasuo menu__item-select-icon  inline-block-v-middle ">
+            <span class="iconfont icon-jieyasuo menu__item-select-icon inline-block-v-middle">
             </span>
             <span class="menu-text">到当前文件夹</span>
           </v-contextmenu-item>
-          <v-contextmenu-item class="contextmenu-item" @click="unzip(fileList[selectFileIndex],2)">
+          <v-contextmenu-item class="contextmenu-item" @click="unzip(fileList[selectFileIndex], 2)">
             <span class="iconfont icon-jieyasuo menu__item-select-icon inline-block-v-middle">
-
             </span>
             <span class="menu-text">
-              到"{{ this.fileList[this.selectFileIndex].fileName.replace('.' + this.fileList[this.selectFileIndex].fileExt, '')
-              }}"</span>
+              到"{{
+                this.fileList[this.selectFileIndex].fileName.replace(
+                  '.' + this.fileList[this.selectFileIndex].fileExt,
+                  ''
+                )
+              }}"</span
+            >
           </v-contextmenu-item>
-          <v-contextmenu-item class="contextmenu-item" @click="unzip(fileList[selectFileIndex],3)">
+          <v-contextmenu-item class="contextmenu-item" @click="unzip(fileList[selectFileIndex], 3)">
             <span class="iconfont icon-jieyasuo menu__item-select-icon inline-block-v-middle">
               <!--<i class="iconfont icon-jieyasuo1 v-contextmenu-submenu__icon"-->
               <!--   style="font-size: 14px">-->
@@ -796,33 +828,43 @@
             </span>
             <span class="menu-text">到目标文件夹</span>
           </v-contextmenu-item>
-
         </v-contextmenu-submenu>
 
         <!--格式转换-->
-        <v-contextmenu-submenu title="格式转换"
-                               v-if="conversionExtList.includes(fileList[selectFileIndex].fileExt)">
-          <v-contextmenu-item class="contextmenu-item"
-                              v-show="fileList[selectFileIndex].fileExt === 'pdf'"
-                              @click="formatConversion(fileList[selectFileIndex],'docx')">
+        <v-contextmenu-submenu
+          title="格式转换"
+          v-if="conversionExtList.includes(fileList[selectFileIndex].fileExt)"
+        >
+          <v-contextmenu-item
+            class="contextmenu-item"
+            v-show="fileList[selectFileIndex].fileExt === 'pdf'"
+            @click="formatConversion(fileList[selectFileIndex], 'docx')"
+          >
             <!--<span class="menu__item-select-icon inline-block-v-middle">-->
             <!--</span>-->
             <span class="menu-text">转Word</span>
           </v-contextmenu-item>
-          <v-contextmenu-item class="contextmenu-item"
-                              v-show="fileList[selectFileIndex].fileExt === 'doc' ||
-                  fileList[selectFileIndex].fileExt === 'docx' || fileList[selectFileIndex].fileExt === 'xlsx'"
-                              @click="formatConversion(fileList[selectFileIndex],'pdf')">
+          <v-contextmenu-item
+            class="contextmenu-item"
+            v-show="
+              fileList[selectFileIndex].fileExt === 'doc' ||
+              fileList[selectFileIndex].fileExt === 'docx' ||
+              fileList[selectFileIndex].fileExt === 'xlsx'
+            "
+            @click="formatConversion(fileList[selectFileIndex], 'pdf')"
+          >
             <!--<span class="menu__item-select-icon inline-block-v-middle">-->
             <!--</span>-->
             <span class="menu-text">转PDF</span>
-
           </v-contextmenu-item>
         </v-contextmenu-submenu>
 
         <!--文字识别-->
-        <v-contextmenu-item style="margin: 3px 0" @click="ocr(selectFileIndex)"
-                            v-if="fileList[selectFileIndex].fileType===1">
+        <v-contextmenu-item
+          style="margin: 3px 0"
+          @click="ocr(selectFileIndex)"
+          v-if="fileList[selectFileIndex].fileType === 1"
+        >
           <i class="iconfont icon-wenzishibie v-contextmenu-submenu__icon" style="font-size: 14px">
           </i>
           文字识别
@@ -835,13 +877,14 @@
       </template>
 
       <!--多文件右键菜单-->
-      <template v-if="selectedFileCount>1">
+      <template v-if="selectedFileCount > 1">
         <!--<v-contextmenu-item>多个文件右键</v-contextmenu-item>-->
         <v-contextmenu-item
           @click="menuMethods(item.methodName)"
           style="margin: 3px 0"
           v-for="item in multiMenuList"
-          :key="item.id">
+          :key="item.id"
+        >
           <i class="iconfont v-contextmenu-submenu__icon" :class="item.iconClassName"></i>
           {{ item.name }}
         </v-contextmenu-item>
@@ -860,7 +903,7 @@
       v-show="showMenu"
       :selectFileIndex="selectFileIndex"
       :selectedFile="selectedFile"
-      :file="fileList[this.selectFileIndex ===-1 ? this.selectFileIndex : 0]"
+      :file="fileList[this.selectFileIndex === -1 ? this.selectFileIndex : 0]"
       :count="selectedFileCount"
       :type="selectedFileCount === 1 ? 1 : 2"
     ></ContextMenu>
@@ -894,12 +937,10 @@
     <!--&gt;-->
     <!--  测试方法2-->
     <!--</div>-->
-
   </div>
 </template>
 
 <script>
-
 import {
   batchCopyFile,
   batchDeleteFile,
@@ -915,8 +956,8 @@ import {
   searchFile,
   shareFile,
   unzipFile,
-  getProgress
-  , formatconversion
+  getProgress,
+  formatconversion
 } from '@/request/file'
 import viewerApi from '@/components/play/imagePreview/api'
 import FileInfo from '@/components/index/fileInfo/FileInfo'
@@ -927,6 +968,7 @@ import Bus from '@/libs/bus'
 import { getUserInfo } from '@/request/user'
 import { blankMenuList, conversionExtList, defaultMenuList, multiMenuList } from '@/libs/map'
 import Vue from 'vue'
+import { debounce } from '@/utils/utils'
 
 var websocket
 let unzipTimer
@@ -1098,7 +1140,9 @@ export default {
   },
   watch: {
     createFolderName: function(val) {
-      var flag = new RegExp('[`~!@#$^&*()=|{}\':;\',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“\'。，、？ ]')
+      var flag = new RegExp(
+        '[`~!@#$^&*()=|{}\':;\',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“\'。，、？ ]'
+      )
       // // 判断 even 是否包含特殊字符
       if (flag.test(val)) {
         this.$toast.error('文件夹名称不能包含特殊字符')
@@ -1142,10 +1186,6 @@ export default {
       this.showLoading = true
       // var path = this.$route.query.filePath
       this.$store.commit('updateFullPath', path)
-      // if (this.$route.query.searh !== undefined) {
-      //   this.search()
-      //   return
-      // }
       if (path === undefined) {
         this.fullPath = ''
         this.currentPath = ''
@@ -1158,7 +1198,7 @@ export default {
     },
     // 监听文件分类变化
     '$route.query.category': function() {
-      // 加载新文件列表时重置数据为空,开始呢 加载动画
+      // 加载新文件列表时重置数据为空,开始 加载动画
       this.fileList.length = 0
       this.sortFileList.length = 0
       this.showLoading = true
@@ -1167,7 +1207,6 @@ export default {
       this.pageCount = 0
       this.selectedFileCount = 0
       // 只要categoryId的值发生变化,这个方法就会被调用
-      console.log('this.$route.query.category !== undefined========', this.$route.query.category !== undefined)
       if (this.$route.query.category != undefined) {
         if (this.$route.query.category == 'all') {
           this.fullPath = ''
@@ -1180,56 +1219,12 @@ export default {
             currentPage: this.$store.state.currentPage,
             pageCount: this.$store.state.pageCount
           }
-          console.log('$route.query.category获取分类文件列表')
           this.getFileListByType(data)
         }
       }
     },
     searchKeyWords: function(val) {
-      if (val === '') {
-        return
-      }
-      const data = {
-        keywords: val
-      }
-      searchFile(data, true).then((res) => {
-        if (res.code === 0) {
-          this.fileList.length = 0
-          this.sortFileList.length = 0
-          this.fileList = res.data
-          this.sortFileList = res.data
-          this.$store.commit('updateFileList', this.fileList)
-          this.selectedFile = new Array(this.fileList.length).fill(false)
-          // this.pageData.total = res.data.total
-          // this.loading = false
-        } else {
-          this.$toast.error(res.msg)
-        }
-      })
-    },
-    '$route.query.search1': function() {
-      if (this.$route.query.search === undefined) {
-        this.back('/')
-      } else {
-        console.log(this.searchKeyWords)
-        // const data = {
-        //   keywords: this.searchKeyWords
-        // }
-        // searchFile(data, true).then((res) => {
-        //   if (res.code === 0) {
-        //     this.fileList.length = 0
-        //     this.sortFileList.length = 0
-        //     this.fileList = res.data
-        //     this.sortFileList = res.data
-        //     this.$store.commit('updateFileList', this.fileList)
-        //     this.selectedFile = new Array(this.fileList.length).fill(false)
-        //     // this.pageData.total = res.data.total
-        //     // this.loading = false
-        //   } else {
-        //     this.$toast.error(res.msg)
-        //   }
-        // })
-      }
+      debounce(this.search, 300)
     },
     showMenu (value) {
       if (value) {
@@ -1345,14 +1340,16 @@ export default {
       this.getFileList(this.fullPath, true)
     })
   },
-  destroyed: function() { // 离开页面生命周期函数
-
+  destroyed: function() {
+    // 离开页面生命周期函数
   },
   methods: {
     createWebSocket (userId, fileId, path) {
       if (!websocket) {
         // return new WebSocket('ws://localhost:8080/api/push/websocket/?uid' + userId + '&fid' + fileId)
-        return new WebSocket('ws://localhost:8080/api/progress?fileName=123.zip&urlStr=https://mirrors.aliyun.com/ubuntu-releases/trusty/ubuntu-14.04.6-server-amd64.iso&userId=1&type=offline&downloadPath=/&fileSavePath=/')
+        return new WebSocket(
+          'ws://localhost:8080/api/progress?fileName=123.zip&urlStr=https://mirrors.aliyun.com/ubuntu-releases/trusty/ubuntu-14.04.6-server-amd64.iso&userId=1&type=offline&downloadPath=/&fileSavePath=/'
+        )
         // console.log('ws://' + window.location.host + '/api/push/websocket' + userId + '/' + fileId)
         // websocket = WebSocket('ws://' + window.location.host + '/api/push/websocket?sid=' + JSON.parse(localStorage.getItem('userInfo')).userName)
         // return websocket
@@ -1403,7 +1400,6 @@ export default {
       getDownloadProgress().then((res) => {
         console.log(res)
         if (res.code === 0) {
-
         } else {
           // this.$message.error(res.message)
         }
@@ -1457,9 +1453,7 @@ export default {
         getProgress(data).then((res) => {
           Bus.$emit(
             'updateLoadingText',
-            res.data.progress >= 100
-              ? '转换完成'
-              : '转换进度: ' + res.data.progress + '%'
+            res.data.progress >= 100 ? '转换完成' : '转换进度: ' + res.data.progress + '%'
           )
           if (res.data.finish === 1) {
             clearInterval(formatTimer)
@@ -1532,7 +1526,9 @@ export default {
         })
         // 在当前文件夹下创建 解压文件目录
       } else if (type === 2) {
-        filePath = (item.filePath === '/' ? '/' : item.filePath + '/') + item.fileName.replace('.' + item.fileExt, '')
+        filePath =
+          (item.filePath === '/' ? '/' : item.filePath + '/') +
+          item.fileName.replace('.' + item.fileExt, '')
       } else {
         filePath = this.$store.state.fullPath
       }
@@ -1546,7 +1542,8 @@ export default {
       // websocket = new WebSocket('ws://localhost:8080/api/progress/unzip?id=' + this.fileList[this.selectFileIndex].id + '&uid=' + this.$store.state.userInfo.id)
       // this.$toast.success(',解压文件所在目录解压文件所在目录解压文件所在目录解压文件所在目录:' + filePath, -1)
       // 解压到指定文件夹
-      this.unzipTimer = window.setInterval(function() { // 每5秒刷新一次
+      this.unzipTimer = window.setInterval(function() {
+        // 每5秒刷新一次
         const data = {
           type: 'unzip',
           fid: item.id,
@@ -1554,7 +1551,7 @@ export default {
           filePath: filePath,
           t: _this.remoteTask
         }
-        getProgress(data).then(res => {
+        getProgress(data).then((res) => {
           Bus.$emit('toastMsg', ' 解压进度: ' + res.data.progress + '%')
           // Bus.$emit('updateLoadingText', res.data.progress >= 100 ? '解压完成' : '解压进度: ' + res.data.progress + '%')
           if (res.code === 0) {
@@ -1684,12 +1681,31 @@ export default {
       })
     },
     // 文件搜索
-    search () {
+    search (val) {
       this.selectAllFiles = false
       this.selectedFileCount = 0
       if (this.searchKeyWords === '') {
         this.$toast.error('搜索关键词不能为空')
+        return
       }
+      val = this.searchKeyWords
+      const data = {
+        keywords: val
+      }
+      searchFile(data, true).then((res) => {
+        if (res.code === 0) {
+          this.fileList.length = 0
+          this.sortFileList.length = 0
+          this.fileList = res.data
+          this.sortFileList = res.data
+          this.$store.commit('updateFileList', this.fileList)
+          this.selectedFile = new Array(this.fileList.length).fill(false)
+          // this.pageData.total = res.data.total
+          // this.loading = false
+        } else {
+          this.$toast.error(res.msg)
+        }
+      })
       // this.$router.replace({
       //   // path: '/index',
       //   query: {
@@ -1827,7 +1843,6 @@ export default {
       }
     },
     moreOption () {
-
     },
     // 打开右键菜单
     openMenu (e, item, index) {
@@ -1865,10 +1880,7 @@ export default {
         this.selectedFile[index] = true
         this.$store.commit('updateSelectFileCount', this.selectedFileCount)
         // 判断是否所有都选则
-        if (
-          this.selectedFile.filter((file) => file == true).length ===
-          this.fileList.length
-        ) {
+        if (this.selectedFile.filter((file) => file == true).length === this.fileList.length) {
           this.selectAllFiles = true
         } else {
           this.selectAllFiles = false
@@ -1887,14 +1899,10 @@ export default {
           this.$store.commit('updateSelectFullPath', this.selectFullPath)
         } else {
           // 路径不为空时
-          this.selectFullPath =
-            this.$route.query.filePath + '/' + this.fileList[index].fileName
+          this.selectFullPath = this.$route.query.filePath + '/' + this.fileList[index].fileName
           this.$store.commit('updateSelectFullPath', this.selectFullPath)
         }
-        this.selectFileIndex = this.getSelectedFileIndex(
-          this.selectedFile,
-          true
-        )
+        this.selectFileIndex = this.getSelectedFileIndex(this.selectedFile, true)
       } else {
         this.selectFileIndex = -1
       }
@@ -1933,7 +1941,8 @@ export default {
           this.$router.push({
             query: {
               category: 'all',
-              filePath: item.filePath === '/' ? '/' + item.fileName : item.filePath + '/' + item.fileName
+              filePath:
+                item.filePath === '/' ? '/' + item.fileName : item.filePath + '/' + item.fileName
             }
           })
           this.searchKeyWords = ''
@@ -1980,50 +1989,52 @@ export default {
         userInfo: this.$store.state.userInfo,
         onlyFolder: true,
         show: true
-      }).then(res => {
-        console.log('res:', res)
-        if (this.selectedFileCount === 1 && this.fileList[this.selectFileIndex].isDir !== 1) {
-          if (res.filePath == this.fileList[this.selectFileIndex].filePath) {
-            this.$toast.error('不能复制到当前目录')
-            return
-          }
-          const data = {
-            userId: this.getCookies('uid'),
-            filePath: res.filePath,
-            fileId: this.fileList[this.selectFileIndex].id
-          }
-          copyFile(data, true).then((res) => {
-            console.log(res)
-            if (res.code === 0) {
-              this.selectedFile = new Array(this.fileList.length).fill(false)
-              this.$toast.success(res.msg)
-              this.getFileList(this.fullPath, true)
-            } else {
-              this.$toast.error(res.msg)
-            }
-          })
-        } else {
-          if (res.filePath == this.selectFileList[0].filePath) {
-            this.$toast.error('不复制到当前目录')
-            return
-          }
-          const data = {
-            // userId: this.getCookies('uid'),
-            filePath: res.filePath,
-            fileList: this.selectFileList
-          }
-          batchCopyFile(data).then((res) => {
-            if (res.code === 0) {
-              this.getFileList(this.fullPath)
-            } else {
-              this.$toast.error(res.msg)
-            }
-          })
-          console.log('批量复制')
-        }
-      }).catch(err => {
-        console.log(err)
       })
+        .then((res) => {
+          console.log('res:', res)
+          if (this.selectedFileCount === 1 && this.fileList[this.selectFileIndex].isDir !== 1) {
+            if (res.filePath == this.fileList[this.selectFileIndex].filePath) {
+              this.$toast.error('不能复制到当前目录')
+              return
+            }
+            const data = {
+              userId: this.getCookies('uid'),
+              filePath: res.filePath,
+              fileId: this.fileList[this.selectFileIndex].id
+            }
+            copyFile(data, true).then((res) => {
+              console.log(res)
+              if (res.code === 0) {
+                this.selectedFile = new Array(this.fileList.length).fill(false)
+                this.$toast.success(res.msg)
+                this.getFileList(this.fullPath, true)
+              } else {
+                this.$toast.error(res.msg)
+              }
+            })
+          } else {
+            if (res.filePath == this.selectFileList[0].filePath) {
+              this.$toast.error('不复制到当前目录')
+              return
+            }
+            const data = {
+              // userId: this.getCookies('uid'),
+              filePath: res.filePath,
+              fileList: this.selectFileList
+            }
+            batchCopyFile(data).then((res) => {
+              if (res.code === 0) {
+                this.getFileList(this.fullPath)
+              } else {
+                this.$toast.error(res.msg)
+              }
+            })
+            console.log('批量复制')
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
 
       // this.$confirmBox({
       //   title: '复制文件',
@@ -2071,48 +2082,50 @@ export default {
         userInfo: this.$store.state.userInfo,
         onlyFolder: true,
         show: true
-      }).then(res => {
-        console.log('res:', res)
-        if (this.selectedFileCount === 1 && this.fileList[this.selectFileIndex].isDir !== 1) {
-          // let files
-          // this.fileList.filter((item,index) => item)
-          if (res.filePath == this.fileList[this.selectFileIndex].filePath) {
-            this.$toast.error('不能移动到当前目录')
-            return
-          }
-          const data = {
-            userId: this.getCookies('uid'),
-            fileId: this.fileList[this.selectFileIndex].id,
-            filePath: res.filePath
-          }
-          moveFile(data).then((res) => {
-            console.log(res)
-            if (res.code === 0) {
-              this.getFileList(this.fullPath, true)
-            } else {
-              this.$toast.error(res.msg)
-            }
-          })
-        } else {
-          const data = {
-            // userId: this.getCookies('uid'),
-            filePath: res.filePath,
-            fileList: this.selectFileList
-          }
-          batchMoveFile(data).then((res) => {
-            if (res.code === 0) {
-              this.getFileList(this.fullPath)
-              this.selectedFile.length = 0
-              this.selectedFileCount = 0
-            } else {
-              this.$toast.error(res.msg)
-            }
-          })
-          // 批量移动
-        }
-      }).catch(err => {
-        console.log(err)
       })
+        .then((res) => {
+          console.log('res:', res)
+          if (this.selectedFileCount === 1 && this.fileList[this.selectFileIndex].isDir !== 1) {
+            // let files
+            // this.fileList.filter((item,index) => item)
+            if (res.filePath == this.fileList[this.selectFileIndex].filePath) {
+              this.$toast.error('不能移动到当前目录')
+              return
+            }
+            const data = {
+              userId: this.getCookies('uid'),
+              fileId: this.fileList[this.selectFileIndex].id,
+              filePath: res.filePath
+            }
+            moveFile(data).then((res) => {
+              console.log(res)
+              if (res.code === 0) {
+                this.getFileList(this.fullPath, true)
+              } else {
+                this.$toast.error(res.msg)
+              }
+            })
+          } else {
+            const data = {
+              // userId: this.getCookies('uid'),
+              filePath: res.filePath,
+              fileList: this.selectFileList
+            }
+            batchMoveFile(data).then((res) => {
+              if (res.code === 0) {
+                this.getFileList(this.fullPath)
+                this.selectedFile.length = 0
+                this.selectedFileCount = 0
+              } else {
+                this.$toast.error(res.msg)
+              }
+            })
+            // 批量移动
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
     // 重命名文件
     renameFile () {
@@ -2123,6 +2136,7 @@ export default {
         title: '重命名文件',
         showType: 3,
         file: this.fileList[this.selectFileIndex],
+        originName: this.fileList[this.selectFileIndex].fileName.replace('.' + this.fileList[this.selectFileIndex].fileExt, ''),
         operation: 'rename'
       })
         .then((res) => {
@@ -2376,15 +2390,19 @@ export default {
           _this.remoteTask = new Date().getTime()
           this.$toast.success('离线下载任务开始...', -1)
           // 创建离线下载进度更新定时器
-          offlineTimer = setInterval(function() { // 每5秒刷新一次
+          offlineTimer = setInterval(function() {
+            // 每5秒刷新一次
             const data = {
               type: 'remote',
               url: p.url,
               t: _this.remoteTask
             }
-            getProgress(data).then(res => {
+            getProgress(data).then((res) => {
               if (_this.offlineFile.fileName !== undefined) {
-                Bus.$emit('toastMsg', _this.offlineFile.fileName + ' 下载进度: ' + res.data.progress + '%')
+                Bus.$emit(
+                  'toastMsg',
+                  _this.offlineFile.fileName + ' 下载进度: ' + res.data.progress + '%'
+                )
               }
               // Bus.$emit('updateLoadingText', res.data.progress >= 100 ? '下载完成' : '下载进度: ' + res.data.progress + '%')
               if (res.data.progress >= 100) {
@@ -2419,7 +2437,9 @@ export default {
     createFolderAction () {
       // var flag = new RegExp('[`~!@#$^&*()=|{}\':;\',\\[\\].<><>/?~!@#￥……&*()_|{}【】';:""\'.,、? ]')
       // var flag = new RegExp('[`~!@#$^&*()=|{}\':;\',\\[\\].<><>/?~!@#￥……&*()_|{}【】';:""\'.,、? ]')
-      var flag = new RegExp('[`~!@#$^&*()=|{}\':;\',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“\'。，、？ ]')
+      var flag = new RegExp(
+        '[`~!@#$^&*()=|{}\':;\',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“\'。，、？ ]'
+      )
       // 判断文件名是否包含特殊字符
       if (flag.test(this.createFolderName)) {
         this.$toast.error('文件夹名称不能包含特殊字符')
@@ -2457,6 +2477,4 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="less" scoped></style>

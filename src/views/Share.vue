@@ -1,6 +1,6 @@
 <template>
-  <div class="share-main">
-    <div class="share-main__tip">
+  <div class="note-main">
+    <div class="note-main__tip">
       <div class="text">
         提示:链接分享(分享失败或分享过期的将被自动清理)
       </div>
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div class="share-main__title">
+    <div class="note-main__title">
       <div class="name">全部文件</div>
       <div class="count">已全部加载,共 {{ fileList.length }} 个</div>
     </div>
@@ -561,14 +561,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.share-main {
+.note-main {
   width: 100%;
   height: 100%;
   position: relative;
   padding: 0 20px;
   min-width: 750px;
 
-  .share-main__tip {
+  .note-main__tip {
     color: #666;
     padding: 10px 0;
     font-size: 12px;
@@ -612,7 +612,7 @@ export default {
     }
   }
 
-  .share-main__title {
+  .note-main__title {
     width: calc(100% - 288px);;
     font-size: 12px;
     padding-right: 18px;

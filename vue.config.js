@@ -7,16 +7,17 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 //  TODO 打包时把以下代码注释取消
 const webpack = require('webpack')
 const CompressionPlugin = require('compression-webpack-plugin')
+const { codeInspectorPlugin } = require('code-inspector-plugin')
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production' ? '/pan' : '/', // 打包配置
   assetsDir: 'static', // 静态资源保存路径
   devServer: {
     // open: true,
-    port: 8081,
+    port: 8082,
     host: '0.0.0.0',
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:8080',
+        target: 'http://127.0.0.1:8081',
         changeOrigin: true,
         ws: true
         // pathRewrite: {
@@ -131,7 +132,7 @@ module.exports = {
         recordsPath:
           '../cache/node_modules/.cache/hard-source/[confighash]/records.json',
         // configHash 在启动 webpack 实例时转换 webpack 配置，并用于cacheDirectory 为不同的 webpack 配置构建不同的缓存
-        configHash: function (webpackConfig) {
+        configHash: function(webpackConfig) {
           return require('node-object-hash')({ sort: false }).hash(
             webpackConfig
           )
@@ -141,7 +142,7 @@ module.exports = {
         environmentHash: {
           root: process.cwd(),
           directories: [],
-          files: ['package-lock.json', 'yarn.lock']
+          files: ['package-lock1.json', 'yarn.lock']
         }
       }),
       // 分析插件
@@ -166,6 +167,10 @@ module.exports = {
         test: /\.js$|\.css$|\.html$/,
         threshold: 10240,
         minRatio: 0.8
+      }),
+      // eslint-disable-next-line new-cap
+      new codeInspectorPlugin({
+        bundler: 'webpack'
       })
     ]
   }

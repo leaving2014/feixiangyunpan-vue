@@ -132,7 +132,6 @@ export default {
     url () {
       // 获取路由前置守卫中 next 函数的参数，即登录后要去的页面
       var _url = this.$route.query.redirect
-      console.log('_url======', _url)
       return _url
         ? { path: _url }
         : {
@@ -160,19 +159,10 @@ export default {
     }
   },
   mounted () {
-    // getUserInfo().then((res) => {
-    //   console.log(res)
-    //   if (res.code === 0) {
-    //   } else {
-    //     // 跳转登录时清除所有缓存信息
-    //     localStorage.clear()
-    //   }
-    // })
     var url = location.href
     if (url.indexOf('redirect') !== -1) {
       // 取出url中的redirect参数
       var decodeUrl = decodeURIComponent(this.$route.fullPath.split('redirect=')[1])
-      console.log('decodeUrl====', decodeUrl)
       if (location.href.indexOf('redirect') != -1) {
         sessionStorage.setItem('redirect', decodeUrl)
       }
@@ -182,25 +172,13 @@ export default {
     //   点击登录的回调
     async onSubmit () {
       this.orginUrl = this.$route.query.redirect || '/'
-      console.log('登录后跳转的页面', this.orginUrl)
       const res = await this.$request(
         '/user/login',
         this.login,
         'post',
         'params'
       )
-      // login(this.login).then(async (res) => {
-      //   console.log(res)
-      //   if (res.code === 0) {
-      //
-      //   } else {
-      //
-      //   }
-      // })
-
-      console.log(res)
       if (res.code === 0) {
-        console.log(res.data)
         this.$toast.success('登录成功')
         // 登陆成功
         this.$store.commit('updateUserInfo', res.data.userInfo)
@@ -211,7 +189,6 @@ export default {
         )
         // 将token存入本地
         window.localStorage.setItem('token', res.data.token)
-        console.log(window.localStorage.getItem('userInfo'))
         if (sessionStorage.getItem('redirect')) {
           location.href = sessionStorage.getItem('redirect')
           sessionStorage.removeItem('redirect')
@@ -225,7 +202,6 @@ export default {
         }
         sessionStorage.setItem('role', 'admin')
 
-        //
         // if (decodeURIComponent(this.$route.fullPath.split('redirect=')[1])) {
         //   window.location.href = decodeURIComponent(this.$route.fullPath.split('redirect=')[1])
         // } else {
@@ -246,9 +222,7 @@ export default {
         this.$toast.error(res.msg)
       }
     },
-
     handleClick (e) {
-      console.log(e.name)
     },
 
     // 获取验证码
@@ -257,7 +231,6 @@ export default {
       const res = await this.$request(
         `/edumsm/msm/send/${this.registered.mobile}`
       )
-      console.log(res)
       if (res.data.success) {
         this.startCountDown()
       }
@@ -282,7 +255,6 @@ export default {
         'post',
         'params'
       )
-      console.log(res)
       // 如果注册成功,清空所有数据并跳转至登录界面,自动填写手机号码
       if (res.code === 0) {
         this.$message.success('注册成功!')

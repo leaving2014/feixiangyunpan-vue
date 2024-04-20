@@ -1,34 +1,34 @@
 <template>
-  <div class="recycle-main">
-    <div class="recycle-main__tip">
+  <div class="note-main">
+    <div class="note-main__tip">
       <div class="text">
-        提示：回收站不占用网盘空间，文件保存 10天 后将被自动清除。
+        提示: 新建笔记在文件管理中同样可以查看
       </div>
       <div class="actions">
         <button
           class="u-button u-button--primary u-button--small is-round"
-          @click="deleteAll()"
+          @click="createNewNote()"
         >
-          <i class="iconfont icon-shanchu"></i>
-          <span>清空回收站</span>
+          <i class="iconfont icon-add"></i>
+          <span>新建笔记</span>
         </button>
       </div>
     </div>
 
-    <div class="recycle-main__title">
-      <div class="name">回收站</div>
-      <div class="count">已全部加载，共 {{ fileList.length }} 个</div>
+    <div class="note-main__title">
+      <div class="name">全部文件</div>
+      <div class="count">已全部加载,共 {{ fileList.length }} 个</div>
     </div>
 
-    <div class="container" id="recycle-list">
-      <!--标题-->
-      <div class="table recycle-list is-show-header">
+    <div class="container" id="share-list">
+      <!--列表-->
+      <div class="table share-list is-show-header">
         <div class="table__header">
           <table class="table__header-table">
             <colgroup>
               <col width="3%" />
-              <col width="50%" />
-              <col width="15%" />
+              <col width="35%" />
+              <col width="20%" />
               <col width="15%" />
               <col width="15%" />
             </colgroup>
@@ -56,11 +56,11 @@
               </th>
               <th class="table__header-th">
                 <div class="text-ellip content inline-block-v-middle">
-                  <section class="recycle-list__name_header">
+                  <section class="share-list__name_header">
                       <span @click="changeOrder('fileName')">{{
                           selectedFileCount > 0
-                            ? '已选择' + selectedFileCount + '个文件/文件夹'
-                            : '文件名'
+                            ? '已选择' + selectedFileCount + '个文件'
+                            : '文档名称'
                         }}</span>
                   </section>
                   <div class="nd-sort" v-show="orderColumn=='fileName'" @click="changeOrder('fileName')">
@@ -73,10 +73,10 @@
               </th>
               <th class="table__header-th">
                 <div class="text-ellip content inline-block-v-middle">
-                  <section class="recycle-list__name_header">
-                    <span @click="changeOrder('fileSize')">大小</span>
+                  <section class="share-list__name_header">
+                    <span @click="changeOrder('shareTime')">更新时间</span>
                   </section>
-                  <div class="nd-sort" v-show="orderColumn=='fileSize'" @click="changeOrder('fileSize')">
+                  <div class="nd-sort" v-show="orderColumn=='shareTime'" @click="changeOrder('shareTime')">
                     <i class="iconfont icon icon-shangsanjiaoxing"
                        :class="order==='asc'?'active':''"></i>
                     <i class="iconfont icon icon-xiasanjiaoxing"
@@ -86,10 +86,10 @@
               </th>
               <th class="table__header-th">
                 <div class="text-ellip content inline-block-v-middle">
-                  <section class="recycle-list__name_header">
-                    <span @click="changeOrder('fileUpdateTime')">删除时间</span>
+                  <section class="share-list__name_header">
+                    <span @click="changeOrder('expiredTimes')">当前版本</span>
                   </section>
-                  <div class="nd-sort" v-show="orderColumn=='fileUpdateTime'" @click="changeOrder('fileUpdateTime')">
+                  <div class="nd-sort" v-show="orderColumn=='browseTime'" @click="changeOrder('expiredTime')">
                     <i class="iconfont icon icon-shangsanjiaoxing"
                        :class="order==='asc'?'active':''"></i>
                     <i class="iconfont icon icon-xiasanjiaoxing"
@@ -99,10 +99,10 @@
               </th>
               <th class="table__header-th">
                 <div class="text-ellip content inline-block-v-middle">
-                  <section class="recycle-list__name_header">
-                    <span @click="changeOrder('expired')">有效时间</span>
+                  <section class="share-list__name_header">
+                    <span @click="changeOrder('browseTimes')" title="选择历史版本可进行编辑">历史版本</span>
                   </section>
-                  <div class="nd-sort" v-show="orderColumn=='expired'" @click="changeOrder('expired')">
+                  <div class="nd-sort" v-show="orderColumn=='browseTimes'" @click="changeOrder('browseTimes')">
                     <i class="iconfont icon icon-shangsanjiaoxing"
                        :class="order==='asc'?'active':''"></i>
                     <i class="iconfont icon icon-xiasanjiaoxing"
@@ -115,12 +115,12 @@
           </table>
         </div>
         <!--数据显示主体-->
-        <div class="table__body" v-if="fileList.length> 0">
+        <div class="table__body" v-if="fileList.length > 0">
           <table class="table__body-table">
             <colgroup>
               <col width="3%" />
-              <col width="50%" />
-              <col width="15%" />
+              <col width="35%" />
+              <col width="20%" />
               <col width="15%" />
               <col width="15%" />
             </colgroup>
@@ -128,14 +128,13 @@
             <tr
               class="table__body-row"
               :class="selectedFile[index] === true ? 'selected' : ''"
-              @click.stop="selectFile(index, $event)"
-              :index="index"
+
               v-contextmenu:contextmenu
+              :index="index"
               @contextmenu.prevent="openMenu($event, item, index)"
-              @touchstart="showDeleteButton($event, item, index)"
-              @touchend="clearLoop($event, item, index)"
               v-for="(item, index) in fileList"
               :key="index"
+              :sid="item.batchNum"
             >
               <td class="text-center">
                 <label
@@ -158,7 +157,7 @@
                 </label>
               </td>
               <td class="text-ellip table__td">
-                <div class="list-name recycle-list__list-title" style="padding-left: 0px">
+                <div class="list-name share-list__list-title" style="padding-left: 0">
                   <div class="pointer-events-all cursor-p" draggable="true">
                     <img
                       :src="setFileImg(item)"
@@ -166,87 +165,80 @@
                     />
                     <a
                       class="list-name__title-text inline-block-v-middle text-ellip"
-                      title=""
+                      title="点击打开最新版本文档"
+                      @click.stop="editNote(index, $event)"
                     >{{ item.fileName }}</a
                     >
                   </div>
                 </div>
               </td>
-              <td class="text-ellip table__td normal-column">
+              <td class="text-ellip table__td normal-column update-time">
                 <section class="column-content-hide" style="text-align: left">
-                    <span v-if="item.isDir === 0">{{
-                        item.fileSize | storageTrans
+                    <span>{{
+                        item.fileUpdateTime
                       }}</span>
-                  <span v-else>-</span>
                 </section>
               </td>
-              <td class="text-ellip table__td normal-column">
-                <div
-                  class="recycle-list__list-title recycle-deletetime-column"
-                >
-                  <p class="column-content-hide">{{ item.fileUpdateTime }}</p>
-                  <div
-                    class="column-content-show recycle-deletetime-column__actions theme-primary-text"
-                    style="display: none"
-                  >
-                    <section class="inline-block-v-middle">
-                      <i
-                        class="u-icon u-icon-recovery is-restore"
-                        title="还原"
-                      ></i>
-                      还原
-                    </section>
-                    <section class="inline-block-v-middle pdl10">
-                      <i class="u-icon u-icon-delete is-delete"></i>
-                      删除
-                    </section>
-                  </div>
-                </div>
+              <td class="text-ellip table__td normal-column current-version">
+                <span>{{ docVersions[item.id] ? parseFloat(docVersions[item.id][0].version) : '无版本信息' }}</span>
               </td>
-              <td class="text-ellip table__td normal-column">
+              <td class="text-ellip table__td normal-column history-version">
                 <div
-                  class="recycle-list__list-title recycle-lefttime-column column-content-hide"
+                  class="share-list__list-title share-lefttime-column column-content-hide"
                 >
-                  <span
-                    :class="getNumFromString(calcDiffTime(addDate(new Date(item.fileUpdateTime.replace(/-/g, '/')), 10))) < 3 ? 'warn':''">
-                    <template
-                      v-if="addDate(new Date(item.fileUpdateTime.replace(/-/g, '/')),10).getTime() > new Date().getTime()">
-                      <!--{{ item.expired === 0 ? '永久有效' : getTimeDifference(new Date(item.expiredTime).getTime()) + '天后过期'-->
-                      <!--}}-->
-                      {{
-                        calcDiffTime(addDate(new Date(item.fileUpdateTime.replace(/-/g, '/')), 10)) + '后过期'
-                      }}
-                    </template>
-                    <template v-else>
-                      <span class="warn">已过期</span>
-                    </template>
-                  </span>
+                  <template>
+                    <el-select v-model="selectDocVersin[item.id]" placeholder="请选择"
+                               v-show="docVersions[item.id] && docVersions[item.id].length">
+                      <el-option
+                        v-for="version in docVersions[item.id] || []"
+                        :key="version.id"
+                        :label="version.version"
+                        :value="version.id">
+                      </el-option>
+                    </el-select>
+                  </template>
+                  <span v-show="!docVersions[item.id] ">{{ '无版本信息' }}</span>
+                  <!--<span>{{ item.browseTimes }}次</span>-->
                 </div>
               </td>
             </tr>
             </tbody>
           </table>
         </div>
-        <div class="table__body-empty" v-if="fileList.length === 0" style="vertical-align: middle">
-          <p class="table__body-empty-text">暂无数据</p>
+        <div
+          class="nd-table__body-empty"
+          v-if="fileList.length === 0"
+          style="vertical-align: middle;margin-top: 30px"
+        >
+          <p class="nd-table__body-empty-text">暂无数据</p>
         </div>
       </div>
+
+      <FileInfo
+        :file-list="fileList"
+        :selectFileIndex="selectFileIndex"
+        :selectedFileCount="selectedFileCount"
+      ></FileInfo>
       <Loading v-show="loading"></Loading>
     </div>
-
     <v-contextmenu class="contextmenu" ref="contextmenu" style="width: 120px">
       <template>
-        <v-contextmenu-item
-          @click="menuMethods(item.methodName)"
-          style="margin: 3px 0"
-          v-for="item in RecycleMenuList"
-          :key="item.id">
-          <i class="iconfont v-contextmenu-submenu__icon"
-             :class="item.iconClassName"></i>
-          {{ item.name }}
+        <v-contextmenu-item style="margin: 3px 0"
+
+                            @click="renameDoc(fileList[selectFileIndex])">
+          <!--<i class="iconfont icon-wenzishibie v-contextmenu-submenu__icon" style="font-size: 14px">-->
+          <!--</i>-->
+          重命名
+        </v-contextmenu-item>
+        <v-contextmenu-item style="margin: 3px 0"
+                            @click="cancelShare(fileList[selectFileIndex])">
+          <!--<i class="iconfont icon-wenzishibie v-contextmenu-submenu__icon" style="font-size: 14px">-->
+          <!--</i>-->
+          删除
         </v-contextmenu-item>
       </template>
     </v-contextmenu>
+
     <!--菜单-->
     <!--<ContextMenu-->
     <!--  :left="menuLeft"-->
@@ -260,27 +252,30 @@
 </template>
 
 <script>
-import { clearRecoveryFile, deleteRecoveryFile, getRecoveryFile, restoreRecoveryFile } from '@/request/file'
-// import ContextMenu from '@/components/common/contextMenu/ContextMenu'
+import FileInfo from '@/components/index/fileInfo/FileInfo'
 import Loading from '@/components/common/loading/Loading'
-import { RecycleMenuList } from '@/libs/map'
+import { cancelShareFile, getNotesFileList, getShareList, renameFile } from '@/request/file'
+import Vue from 'vue'
+// import config from '@/config'
 
 export default {
-  name: 'Recycle',
+  name: 'Notes',
   props: {},
   components: {
     // ContextMenu,
+    FileInfo,
     Loading
   },
   data () {
     return {
-      RecycleMenuList,
       showDialog: false,
       selectedFileCount: 0,
       selectFileIndex: -1,
       selectedFile: [],
       selectAllFiles: false,
       fileList: [],
+      docVersions: {},
+      selectDocVersin: {},
       // 右键菜单
       showMenu: false,
       selectFileList: [],
@@ -324,15 +319,32 @@ export default {
       }
     }
   },
-  computed: {},
+  computed: {
+    calcExpiredTime (item) {
+      if (item.expired === 0) {
+        return '永久有效'
+      }
+      var day = this.getTimeDifference(new Date(item.expiredTime).getTime())
+      if (day > 0) {
+        return day + '天后到期'
+      } else if (day === 0) {
+        return '今天到期'
+      } else {
+        return '已过期' + Math.abs(day) + '天'
+      }
+    }
+  },
   created () {
-    this.getRecycleFileList()
+    this.getNotesFileList()
   },
   mounted () {
     document.addEventListener('mouseup', (e) => {
       const el = this.$refs.dialog__mini
       if (el) {
         if (el !== e.target) {
+          this.showDialog = false
+        }
+        if (!el.contains(e.target)) {
           this.showDialog = false
         }
       }
@@ -359,80 +371,6 @@ export default {
       }
       this.orderColumn = column
       this.fileList = this.generateNewList(this.orderColumn, this.order, this.fileList)
-    },
-    menuMethods (method) {
-      this[method]()
-    },
-    // 清空回收站
-    deleteAll () {
-      if (this.fileList === 0) {
-        this.$toast.error('回收站为空')
-        return
-      }
-      this.$confirmBox({
-        title: '清空回收站',
-        msg: '确定清空回收站吗？',
-        showType: 0
-      })
-        .then(() => {
-          this.selectAll()
-          clearRecoveryFile().then((res) => {
-            if (res.code === 0) {
-              this.fileList.length = 0
-              this.selectedFileCount = 0
-              // this.getRecycleFileList()
-              this.$toast.success(res.msg)
-            } else {
-              this.$toast.error(res.msg)
-            }
-          })
-        })
-        .catch(() => {
-        })
-    },
-    // 还原回收站文件
-    restoreFile () {
-      this.$confirmBox({
-        title: '还原文件',
-        msg: '确定还原选中的文件吗？',
-        showType: 0
-      })
-        .then(() => {
-          restoreRecoveryFile(this.selectFileIdList).then((res) => {
-            if (res.code === 0) {
-              this.getRecycleFileList()
-              this.getFileList('/', true)
-              this.$store.commit('updateUserStorage', res.data.userStorage)
-              this.$toast.success('还原成功')
-            } else {
-              this.$toast.error('还原失败')
-            }
-          })
-        })
-        .catch(() => {
-        })
-    },
-    // 删除回收站文件
-    deleteRecycle () {
-      this.$confirmBox({
-        title: '彻底删除',
-        msg: '确定彻底删除选中的项目吗？',
-        showType: 0
-      })
-        .then(() => {
-          deleteRecoveryFile(this.selectFileIdList).then((res) => {
-            if (res.code === 0) {
-              this.fileList.length = 0
-              this.selectedFileCount = 0
-              this.getRecycleFileList()
-              this.$toast.success(res.msg)
-            } else {
-              this.$toast.error(res.msg)
-            }
-          })
-        })
-        .catch(() => {
-        })
     },
     selectFile (index, e) {
       if (this.selectAllFiles === true) {
@@ -476,10 +414,14 @@ export default {
       this.rightClickItem = item
       this.menuLeft = e.screenX - 190
       this.menuTop = e.screenY - 160
+      this.showMenu = true
       if (this.getSelectedFileIndex(this.selectedFile, index) === index) {
         this.selectFile(index, e)
       } else if (this.selectedFileCount === 0) {
         this.selectFile(index, e)
+      }
+      if (this.selectedFile.length === 0) {
+        this.selectedFileCount = 0
       }
     },
     closeMenu () {
@@ -506,10 +448,57 @@ export default {
       }
       this.selectAllFiles = !this.selectAllFiles
     },
-    // 获取回收站文件列表
-    getRecycleFileList () {
-      getRecoveryFile().then((res) => {
+    renameDoc (doc) {
+      this.$confirmBox({
+        title: '重命名笔记',
+        showType: 3,
+        file: this.fileList[this.selectFileIndex],
+        originName: this.fileList[this.selectFileIndex].fileName.replace('.md', ''),
+        operation: 'rename'
+      }).then(res => {
+        if (res.fileName <= 0) {
+          this.$toast.error('文件名不能为空')
+          return
+        }
+        const data = {
+          userId: this.getCookies('uid'),
+          fileId: this.fileList[this.selectFileIndex].id,
+          fileName: res.fileName,
+          filePath: '/',
+          isDir: 0
+        }
+        renameFile(data).then(res => {
+          if (res.code === 0) {
+            this.$toast.success('重命名成功')
+            this.getNotesFileList()
+          } else {
+            this.$toast.error(res.msg)
+          }
+        })
+      })
+    },
+    copyShareLink (row) {
+      if (this.selectedFileCount > 1) {
+        this.$toast.error('请选择一个文件复制链接')
+        return
+      }
+      if (new Date(row.expiredTime).getTime() < new Date().getTime()) {
+        this.$toast.error('该分享已过期,无法复制链接')
+        return
+      }
+      var input = document.createElement('input') // 直接构建input
+      input.value = this.getHostUrl() + '/#/s/' + row.batchNum + '?extractionCode=' + row.extractionCode // 设置内容
+      document.body.appendChild(input) // 添加临时实例
+      input.select() // 选择实例内容
+      document.execCommand('Copy') // 执行复制
+      document.body.removeChild(input) // 删除临时实例
+      this.$toast.success('复制成功')
+    },
+    // 获取分享列表
+    getShareList () {
+      getShareList().then((res) => {
         if (res.code === 0) {
+          this.loading = false
           this.selectedFileCount = 0
           this.fileList.length = 0
           this.fileList = res.data.list
@@ -520,34 +509,93 @@ export default {
         }
       })
     },
-    showDeleteButton (e, item, index) {
-      const that = this
-      this.showMenu = true
-      clearTimeout(this.Loop) // 再次清空定时器，防止重复注册定时器
-      this.Loop = setTimeout(
-        function() {
-          that.openMenu(e, item, index)
-          e.target.dispatchEvent(e.target.createEvent('click'))
-        },
-        1000
-      )
+    getNotesFileList () {
+      const data = {
+        userId: this.getCookies('uid'),
+        filePath: '/',
+        dir: 0,
+        refresh: false
+      }
+      getNotesFileList(data).then((res) => {
+        if (res.code === 0) {
+          this.loading = false
+          this.selectedFileCount = 0
+          this.fileList.length = 0
+          this.fileList = res.data.list
+          this.docVersions = res.data.versions
+          for (const docVersion in res.data.versions) {
+            this.selectDocVersin[docVersion] = res.data.versions[docVersion][0].version
+          }
+          this.selectedFile = new Array(this.fileList.length).fill(false)
+        } else {
+          this.$toast.error(res.msg)
+        }
+      })
     },
-    clearLoop (e) {
-      clearTimeout(this.Loop)
+    createNewNote () {
+      Vue.prototype.$previewMarkdown({
+        fileInfo: {
+          id: 0,
+          type: 'notes'
+        }
+      }).then(res => {
+        // 刷新
+        this.getNotesFileList()
+      })
+    },
+    editNote (index, doc) {
+      const file = this.fileList[index]
+      if (!file.identifier) {
+        file.type = 'notes'
+        Vue.prototype.$previewMarkdown({
+          fileInfo: file,
+          doc: this.docVersions[file.id][0]
+        })
+        // loadDocInfo({ fileId: file.id }).then(res => {
+        //
+        // })
+      } else {
+        Vue.prototype.$previewMarkdown({ fileInfo: file })
+      }
+    },
+    cancelShare (row) {
+      const data = {
+        id: row.id,
+        batchNum: row.batchNum
+      }
+      this.$confirmBox({
+        title: '取消分享',
+        msg: '取消分享后，该条分享记录将被删除，好友将无法再访问此分享链接。\n' +
+          '你确认要取消分享吗？',
+        showType: 0
+      })
+        .then(() => {
+          cancelShareFile(data).then((res) => {
+            if (res.code === 0) {
+              this.$toast.success(res.msg)
+              this.getShareList()
+            } else {
+              this.$toast.error(res.msg)
+            }
+          })
+        })
+        .catch(() => {
+          this.$toast.success('已取消')
+        })
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.recycle-main {
+.note-main {
   width: 100%;
   height: 100%;
   position: relative;
   padding: 0 20px;
   min-width: 750px;
 
-  .recycle-main__tip {
+  .note-main__tip {
     color: #666;
     padding: 10px 0;
     font-size: 12px;
@@ -591,12 +639,12 @@ export default {
     }
   }
 
-  .recycle-main__title {
+  .note-main__title {
+    width: calc(100% - 288px);;
     font-size: 12px;
     padding-right: 18px;
     position: relative;
     height: 40px;
-    width: 100%;
 
     .name {
       color: #03081a;
@@ -615,7 +663,7 @@ export default {
   }
 
   .container {
-    height: calc(100% - 150px);
+    //height: calc(100% - 150px);
 
     .table td,
     .table th,
@@ -623,8 +671,11 @@ export default {
       line-height: 1;
     }
 
-    .recycle-list {
+    .share-list {
       height: 100%;
+      width: calc(100% - 288px);
+      display: inline-block;
+      vertical-align: top;
 
       .table__header-table {
         width: 100%;
@@ -644,8 +695,10 @@ export default {
               width: 100%;
               text-align: left;
 
-              .recycle-list__name_header {
+              .share-list__name_header {
                 display: inline-block;
+                margin-left: 8px;
+                font-weight: 700;
               }
             }
           }
@@ -684,7 +737,7 @@ export default {
             text-align: center;
           }
 
-          .recycle-list__list-title {
+          .share-list__list-title {
             position: relative;
             padding-right: 6.36896vw;
             line-height: 1;
@@ -714,10 +767,6 @@ export default {
         }
       }
     }
-  }
-
-  .table__body-empty {
-    margin-top: 50px;
   }
 }
 </style>

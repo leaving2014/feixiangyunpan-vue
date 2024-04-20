@@ -60,12 +60,6 @@ export default {
           icon: 'icon-shanchu',
           method: 'clearFile',
           desc: '清理垃圾文件'
-        },
-        {
-          name: '在线笔记',
-          icon: 'icon-work-copy',
-          method: 'onlineNote',
-          desc: '在线笔记'
         }
       ]
     }
@@ -92,7 +86,6 @@ export default {
         extName: ['doc', 'docx']
       }).then(res => {
         var file = res.file
-        console.log(JSON.parse(JSON.stringify(res.file)))
         const data = {
           fileExt: 'docx',
           convertExt: 'pdf',
@@ -121,7 +114,6 @@ export default {
         extName: ['pdf']
       }).then(res => {
         var file = res.file
-        console.log(JSON.parse(JSON.stringify(res.file)))
         const data = {
           fileExt: 'pdf',
           convertExt: 'docx',
@@ -150,7 +142,6 @@ export default {
         extName: ['xls', 'xlsx']
       }).then(res => {
         var file = res.file
-        console.log(JSON.parse(JSON.stringify(res.file)))
         const data = {
           fileExt: 'xlsx',
           convertExt: 'pdf',

@@ -22,8 +22,8 @@ axios.defaults.timeout = 10000 * 5
 axios.defaults.baseURL = config.baseContext
 
 // POST 请求头
-axios.defaults.headers.post['Content-Type'] =
-  'application/x-www-form-urlencoded'
+// axios.defaults.headers.post['Content-Type'] =
+//   'application/x-www-form-urlencoded'
 
 // 请求携带cookie
 axios.defaults.withCredentials = true
@@ -50,7 +50,6 @@ axios.interceptors.request.use(
     return config
   },
   (error) => {
-    console.log(error)
     return Promise.reject(error)
   }
 )
@@ -58,7 +57,6 @@ axios.interceptors.request.use(
 // 响应拦截器
 axios.interceptors.response.use(
   (response) => {
-    // console.log('response', response)
     if (response.status === 200) {
       return Promise.resolve(response)
     }
@@ -66,7 +64,6 @@ axios.interceptors.response.use(
   // 服务器状态码不是200的情况
   (error) => {
     if (error.response.status) {
-      console.log(error.response)
       switch (error.response.status) {
         case 404:
           return Promise.reject(error.response)
@@ -93,7 +90,7 @@ axios.interceptors.response.use(
  * @param {object} params 查询参数
  * @returns {Promise}
  */
-export function get(url, params) {
+export function get (url, params) {
   return new Promise((resolve, reject) => {
     axios
       .get(url, {
@@ -115,7 +112,7 @@ export function get(url, params) {
  * @param {boolean | undefined} info 请求体是否为 FormData 格式
  * @returns {Promise}
  */
-export function post(url, data = {}, info) {
+export function post (url, data = {}, info) {
   return new Promise((resolve, reject) => {
     let newData = data
     if (info) {
@@ -142,7 +139,7 @@ export function post(url, data = {}, info) {
  * @param {object} params 请求体
  * @returns {Promise}
  */
-export function put(url, params = {}) {
+export function put (url, params = {}) {
   return new Promise((resolve, reject) => {
     axios.put(url, params).then(
       (res) => {
@@ -161,7 +158,7 @@ export function put(url, params = {}) {
  * @param {object} params 请求体
  * @returns {Promise}
  */
-export function axiosDelete(url, params = {}) {
+export function axiosDelete (url, params = {}) {
   return new Promise((resolve, reject) => {
     axios
       .delete(url, params)

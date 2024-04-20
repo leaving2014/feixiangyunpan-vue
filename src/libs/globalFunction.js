@@ -10,11 +10,11 @@ import { getFileListByPath } from '@/request/file'
 // 全局函数
 const baseUrl = process.env.NODE_ENV === 'development' ? '' : '/pan'
 const globalFunction = {
-  getHostUrl() {
+  getHostUrl () {
     console.log(location)
     return window.location.origin + baseUrl
   },
-  getHost() {
+  getHost () {
     // {
     //   "ancestorOrigins": {},
     //   "href": "http://localhost:8081/#/index?category=all",
@@ -32,11 +32,11 @@ const globalFunction = {
 
     return window.location.origin.replace('8081', config.serverPort)
   },
-  goAccount(path, target = '_self') {
+  goAccount (path, target = '_self') {
     open(`https://txcdn.leaving.top${path}?redirect=${location.href}`, target)
   },
   // 校验网址是否有效
-  checkUrl(str) {
+  checkUrl (str) {
     var regUrl = /(http:\/\/)?([\w.]+)(\/[\w- ./?%&=]*)?/gi
     var result = str.match(regUrl)
     if (result != null) {
@@ -48,8 +48,8 @@ const globalFunction = {
   /*
    * 截取视频的第一帧
    */
-  getVideoBase64(url) {
-    return new Promise(function (resolve) {
+  getVideoBase64 (url) {
+    return new Promise(function(resolve) {
       let dataURL = ''
       const video = document.createElement('video')
       video.setAttribute('crossOrigin', 'anonymous') // 处理跨域
@@ -57,7 +57,7 @@ const globalFunction = {
       video.setAttribute('width', 400)
       video.setAttribute('height', 240)
       video.setAttribute('autoplay', 'autoplay')
-      video.addEventListener('canplaythrough', function () {
+      video.addEventListener('canplaythrough', function() {
         const canvas = document.createElement('canvas')
         const width = video.width // canvas的尺寸和图片一样
         const height = video.height
@@ -70,17 +70,17 @@ const globalFunction = {
     })
   },
   // 获取用户剩余空间大小
-  getRemindSpace() {
+  getRemindSpace () {
     return (
       this.$store.state.userStorage.storageSize -
       this.$store.state.userStorage.storageSizeUsed
     )
   },
   // 更新复制移动的目标文件夹
-  updateTargetFilepath(path) {
+  updateTargetFilepath (path) {
     store.commit('updateCopyMovePath', path)
   },
-  getIndexPageTitle(category) {
+  getIndexPageTitle (category) {
     if (category === 'all') {
       return '全部文件'
     } else if (category === '1') {
@@ -103,8 +103,8 @@ const globalFunction = {
    * @param order
    * @returns {(function(*, *): *)|*}
    */
-  compare(property, order) {
-    return function (a, b) {
+  compare (property, order) {
+    return function(a, b) {
       var value1 = a[property]
       var value2 = b[property]
       if (order === -1) {
@@ -121,7 +121,7 @@ const globalFunction = {
    * @returns {*}
    * @constructor
    */
-  trim(str, isGlobal) {
+  trim (str, isGlobal) {
     var result
     result = str.replace(/(^\s+)|(\s+$)/g, '')
     if (isGlobal.toLowerCase() == 'g') {
@@ -134,7 +134,7 @@ const globalFunction = {
    * @param str
    * @returns {*}
    */
-  copyToClipboard(text, tip) {
+  copyToClipboard (text, tip) {
     var tipText = tip || '复制成功'
     const input = document.createElement('input')
     input.value = text
@@ -150,7 +150,7 @@ const globalFunction = {
    * @param {number} size 文件大小
    * @returns {string} 文件大小(带单位)
    */
-  calculateFileSize(size) {
+  calculateFileSize (size) {
     const B = 1024
     const KB = Math.pow(1024, 2)
     const MB = Math.pow(1024, 3)
@@ -174,7 +174,7 @@ const globalFunction = {
    * @param row
    * @returns {number}
    */
-  getFileCreateTimeStamp(row) {
+  getFileCreateTimeStamp (row) {
     // 转换时间戳
     var date = row.fileCreateTime
     date = date.substring(0, 19)
@@ -183,7 +183,7 @@ const globalFunction = {
     return timestamp
   },
   // 获取时间差
-  getTimeDifference(timeStamp) {
+  getTimeDifference (timeStamp) {
     const now = new Date().getTime()
     const diff = timeStamp - now
     const day = Math.floor(diff / (24 * 3600 * 1000))
@@ -201,7 +201,7 @@ const globalFunction = {
     }
   },
   // 计算时间差
-  calcDiffTime(Time) {
+  calcDiffTime (Time) {
     var now = new Date() // 新建一个日期对象，默认现在的时间
     var expireTime = new Date(Time) // 设置过去的一个时间点，"yyyy-MM-dd HH:mm:ss"格式化日期
 
@@ -229,7 +229,7 @@ const globalFunction = {
     // this.BindTime = days + '天' + hours + '时' + minutes + '分'
   },
   // 时间加指定天数返回新的时间Date
-  addDate(date, days) {
+  addDate (date, days) {
     if (days == undefined || days == '') {
       days = 1
     }
@@ -237,11 +237,11 @@ const globalFunction = {
     newDate.setDate(date.getDate() + days)
     return newDate
   },
-  getNumFromString(text) {
+  getNumFromString (text) {
     var value = text.replace(/[^0-9]/gi, '')
     return value
   },
-  storageTrans(size, status) {
+  storageTrans (size, status) {
     const B = 1024
     const KB = Math.pow(1024, 2)
     const MB = Math.pow(1024, 3)
@@ -278,7 +278,7 @@ const globalFunction = {
    * @param row
    * @returns {string}
    */
-  getRowImageSrc(row) {
+  getRowImageSrc (row) {
     // 转换时间戳
     const timestamp = this.getFileCreateTimeStamp(row)
     var extensionName
@@ -295,7 +295,7 @@ const globalFunction = {
    * @param {object} row 文件信息
    * @returns {string} 图片缩略图路径
    */
-  getImgMinPath(row) {
+  getImgMinPath (row) {
     // 转换时间戳
     const timestamp = this.getFileCreateTimeStamp(row)
     var extensionName
@@ -328,7 +328,7 @@ const globalFunction = {
    * @param {object} row 文件信息
    * @returns {string} 文件路径
    */
-  getViewFilePath(row) {
+  getViewFilePath (row) {
     const timestamp = this.getFileCreateTimeStamp(row)
     return `${config.baseContext}/filetransfer/preview/document?id=${row.identifier}&time=${timestamp}&fileType=${row.fileType}&extensionName=${row.fileExt}`
     // }&isMin=false&shareBatchNum=${row.shareBatchNum}&extractionCode=${
@@ -340,7 +340,7 @@ const globalFunction = {
    * @param row
    * @returns {string}
    */
-  getMediaStreamPath(row) {
+  getMediaStreamPath (row) {
     const timestamp = this.getFileCreateTimeStamp(row)
     // var type
     // if (row.fileType === 3) {
@@ -355,12 +355,12 @@ const globalFunction = {
    * @param row
    * @returns {string}
    */
-  getVideoStreamPath(row) {
+  getVideoStreamPath (row) {
     const timestamp = this.getFileCreateTimeStamp(row)
 
     return `${config.baseContext}/filetransfer/preview/video/stream?id=${row.identifier}&time=${timestamp}&fileType=${row.fileType}&extensionName=${row.fileExt}`
   },
-  getVideoStreamObject(row) {
+  getVideoStreamObject (row) {
     var o = {
       id: row.identifier,
       time: new Date(row.fileCreateTime.valueOf()).getTime(),
@@ -374,7 +374,7 @@ const globalFunction = {
    * @param {object} row 文件信息
    * @returns {string}  文件下载路径
    */
-  getDownloadFilePath(row) {
+  getDownloadFilePath (row) {
     if (row == undefined) {
       return
     }
@@ -417,7 +417,7 @@ const globalFunction = {
    * @param extractionCode
    * @returns {string}
    */
-  getShareDownloadPath(shareInfo, extractionCode) {
+  getShareDownloadPath (shareInfo, extractionCode) {
     if (extractionCode !== null) {
       return `${config.baseContext}/filetransfer/download/batch?filePath=${shareInfo.filePath}&extractionCode=${extractionCode}`
     } else {
@@ -425,7 +425,7 @@ const globalFunction = {
     }
   },
 
-  getFilePath(row) {
+  getFilePath (row) {
     return `${config.baseContext}/filetransfer/download?id=${row.identifier}&uid=${row.userId}&fid=${row.id}&count=${store.state.selectFileIdList.length}&download=1`
   },
   /**
@@ -434,14 +434,14 @@ const globalFunction = {
    * @param {boolean} isHighlight 是否需要展示高亮效果，默认不需要
    * @returns {string} 完整文件名称
    */
-  getFileNameComplete(file, isHighlight = false) {
+  getFileNameComplete (file, isHighlight = false) {
     return isHighlight === true && file.highlightFields
       ? `${file.highlightFields}${
-          file.isDir === 0 && file.fileExt ? `.${file.fileExt}` : ''
-        }`
+        file.isDir === 0 && file.fileExt ? `.${file.fileExt}` : ''
+      }`
       : `${file.fileName}${
-          file.isDir === 0 && file.fileExt ? `.${file.fileExt}` : ''
-        }`
+        file.isDir === 0 && file.fileExt ? `.${file.fileExt}` : ''
+      }`
   },
   /**
    * 设置 Cookies
@@ -449,7 +449,7 @@ const globalFunction = {
    * @param {string} value 值
    * @param {object} others 域名、路径、有效期等,封装到对象中
    */
-  setCookies(name, value, others = null) {
+  setCookies (name, value, others = null) {
     Cookies.set(name, value, { domain: config.domain, ...others })
   },
   /**
@@ -458,7 +458,7 @@ const globalFunction = {
    * @param {object} others 域名、路径等,封装到对象中
    * @returns {string} Cookies 值
    */
-  getCookies(name, others = null) {
+  getCookies (name, others = null) {
     return Cookies.get(name, { domain: config.domain, ...others })
   },
   /**
@@ -466,10 +466,10 @@ const globalFunction = {
    * @param {string} name 名称
    * @param {object} others 域名、路径等,封装到对象中
    */
-  removeCookies(name, others = null) {
+  removeCookies (name, others = null) {
     Cookies.remove(name, { domain: config.domain, ...others })
   },
-  clearCookies() {
+  clearCookies () {
     // 清除所有的cookies
     Cookies.remove()
   },
@@ -478,7 +478,7 @@ const globalFunction = {
    * @param {string} shareBatchNum
    * @returns {string} 完整的分享链接
    */
-  getShareLink(shareBatchNum) {
+  getShareLink (shareBatchNum) {
     return `${location.protocol}//${location.host}/share/${shareBatchNum}`
   },
   /**
@@ -486,17 +486,17 @@ const globalFunction = {
    * @param {string} shareBatchNum
    * @param {string} extractionCode
    */
-  copyShareLink(shareBatchNum, extractionCode) {
+  copyShareLink (shareBatchNum, extractionCode) {
     const input = document.createElement('textarea')
     // 直接构建textarea以保持换行
     input.value =
       extractionCode === null
         ? `分享链接:${this.getShareLink(
-            shareBatchNum
-          )}\n复制链接到浏览器中并输入提取码即可查看文件`
+          shareBatchNum
+        )}\n复制链接到浏览器中并输入提取码即可查看文件`
         : `分享链接:${this.getShareLink(
-            shareBatchNum
-          )}\n提取码:${extractionCode}\n复制链接到浏览器中并输入提取码即可查看文件` // 设置内容
+          shareBatchNum
+        )}\n提取码:${extractionCode}\n复制链接到浏览器中并输入提取码即可查看文件` // 设置内容
     document.body.appendChild(input) // 添加临时实例
     input.select() // 选择实例内容
     document.execCommand('Copy') // 执行复制
@@ -507,7 +507,7 @@ const globalFunction = {
    * 根据文件扩展名设置文件图片
    * @param {object} file 文件信息
    */
-  setFileImg(file) {
+  setFileImg (file) {
     if (file.isDir === 1) {
       //  文件夹
       return fileImgMap.get('dir')
@@ -527,14 +527,14 @@ const globalFunction = {
       return unknownImg
     }
   },
-  setUserAvatar(row) {
+  setUserAvatar (row) {
     if (row.avatar) {
       return row.avatar
     } else {
       return userAvatar
     }
   },
-  setFolderImg() {
+  setFolderImg () {
     return fileImgMap.get('dir')
   },
   /**
@@ -542,7 +542,7 @@ const globalFunction = {
    * @param file
    * @returns {unknown}
    */
-  setFileImgByFileType(file) {
+  setFileImgByFileType (file) {
     if (file.isDir === 1) {
       //  文件夹
       return fileImgMap.get('dir')
@@ -556,7 +556,7 @@ const globalFunction = {
       return unknownImg
     }
   },
-  getImageCompleteUrl(row) {
+  getImageCompleteUrl (row) {
     // 转换时间戳
     const timestamp = this.getFileCreateTimeStamp(row)
     // http://localhost:8081/api/filetransfer/image?time=…82a9ec0277b788ed77e8&fileType=1&extensionName=png
@@ -575,7 +575,7 @@ const globalFunction = {
    * @param {*} imgInfo 单个图片信息
    * @param {*} imgInfoList 多个图片列表
    */
-  handleImgPreview(currentIndex, imgInfo = {}, imgInfoList = []) {
+  handleImgPreview (currentIndex, imgInfo = {}, imgInfoList = []) {
     // 图片分类下 - 传递整个页面的图片列表;非图片分类下 - 由单个图片构建图片列表
     const imgList =
       Number(router.currentRoute.query.fileType) === 1
@@ -608,7 +608,7 @@ const globalFunction = {
    * @param {*} videoInfo 单个视频信息
    * @param {*} videoInfoList 多个视频列表
    */
-  handleVideoPreview(currentIndex, videoInfo = {}, videoInfoList = []) {
+  handleVideoPreview (currentIndex, videoInfo = {}, videoInfoList = []) {
     // 视频分类下 - 传递整个页面的视频列表;非视频分类下 - 由单个视频构建视频列表
     const videoList =
       Number(router.currentRoute.query.category) === 3
@@ -638,7 +638,7 @@ const globalFunction = {
       defaultIndex
     })
   },
-  getLocalFilePath(row) {
+  getLocalFilePath (row) {
     var createdAt = row.fileCreateTime.replace(/-/g, '/')
     var dataText = createdAt.substring(0, 10).replaceAll('/', '')
     var path =
@@ -657,17 +657,17 @@ const globalFunction = {
    * @param e
    * @returns {boolean}
    */
-  handleFilePreview(index, row, fileList) {
+  handleFilePreview (index, row, fileList) {
     var createdAt = row.fileCreateTime.replace(/-/g, '/')
     var dataText = createdAt.substring(0, 10).replaceAll('/', '')
     console.log(
       '本地文件路径' +
-        'D:/ideaWorkspace/pan/static/file/' +
-        dataText +
-        '/' +
-        row.identifier +
-        '.' +
-        row.fileExt
+      'D:/ideaWorkspace/pan/static/file/' +
+      dataText +
+      '/' +
+      row.identifier +
+      '.' +
+      row.fileExt
     )
     // 图片预览
     if (row.fileType === 1) {
@@ -746,6 +746,9 @@ const globalFunction = {
       //  若当前点击项是 markdown 文档
       const MARKDOWN = ['markdown', 'md']
       if (MARKDOWN.includes(row.fileExt.toLowerCase())) {
+        if (!row.identifier) {
+          row.type = 'notes'
+        }
         Vue.prototype.$previewMarkdown({ fileInfo: row })
         return false
       }
@@ -776,7 +779,7 @@ const globalFunction = {
       return false
     }
   },
-  randomString(len) {
+  randomString (len) {
     len = len || 32
     var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'
     /** **默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
@@ -788,7 +791,7 @@ const globalFunction = {
     return pwd
   },
   // 获取当前服务器基础地址和端口
-  getBaseUrl() {
+  getBaseUrl () {
     const protocol = window.location.protocol
     // console.log('protocol', protocol)
     const hostName = window.location.hostname
@@ -804,7 +807,7 @@ const globalFunction = {
       return `${protocol}//${hostName}:${config.serverPort}${config.baseContext}`
     }
   },
-  getStaticPicUrl(picUrl) {
+  getStaticPicUrl (picUrl) {
     if (picUrl != null) {
       // return this.getBaseUrl() + picUrl
       return `${this.getBaseUrl()}${picUrl}`
@@ -815,7 +818,7 @@ const globalFunction = {
   },
 
   // 排序 按照列名 和 升降序
-  generateNewList(col, order, list) {
+  generateNewList (col, order, list) {
     const newList = list.slice()
     if (order == 'desc') {
       newList.sort((a, b) => {
@@ -837,7 +840,7 @@ const globalFunction = {
   //   }
   // },
   // 获取文件列表(通过全路径)
-  getFileList(path, isRefresh) {
+  getFileList (path, isRefresh) {
     if (!this.$route.path.includes('index')) {
       // this.getFileListByType(this.$route.query.category)
       return false

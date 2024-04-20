@@ -12,7 +12,6 @@ export default {
   },
   created () {
     this.getSysConfig()
-    console.log('App created!')
   },
   mounted () {
     const that = this

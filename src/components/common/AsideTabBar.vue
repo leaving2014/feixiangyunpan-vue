@@ -102,49 +102,6 @@
         </div>
       </router-link>
     </div>
-
-
-    <!--<router-link class="aside-nav__sub-item sub_item" :to="{path:'/recycle'}">-->
-    <!--  <div class="aside-nav__sub-item-body">-->
-    <!--    <p class="aside-nav__sub-item-text inline-block-v-middle text-elip" title="回收站">-->
-    <!--      回收站-->
-    <!--    </p>-->
-    <!--  </div>-->
-    <!--</router-link>-->
-    <!--<div class="aside-nav__divider"></div>-->
-    <!--<router-link class="aside-nav__sub-item sub_item" :to="{path:'/share'}">-->
-    <!--  <div class="aside-nav__sub-item-body">-->
-    <!--    <p class="aside-nav__sub-item-text inline-block-v-middle text-elip" title="分享">-->
-    <!--      分享-->
-    <!--    </p>-->
-    <!--  </div>-->
-    <!--</router-link>-->
-    <!--<div class="aside-nav__divider"></div>-->
-    <!--<router-link class="aside-nav__sub-item sub_item" :to="{path:'/tools'}">-->
-    <!--  <div class="aside-nav__sub-item-body">-->
-    <!--    <p class="aside-nav__sub-item-text inline-block-v-middle text-elip" title="回收站">-->
-    <!--      工具箱-->
-    <!--    </p>-->
-    <!--  </div>-->
-    <!--</router-link>-->
-    <!--<div class="aside-nav__divider"></div>-->
-    <!--<router-link class="aside-nav__sub-item sub_item" :to="{path:'/play'}">-->
-    <!--  <div class="aside-nav__sub-item-body">-->
-    <!--    <p class="aside-nav__sub-item-text inline-block-v-middle text-elip" title="回收站">-->
-    <!--      视频播放-->
-    <!--    </p>-->
-    <!--  </div>-->
-    <!--</router-link>-->
-    <!--<div class="aside-nav__divider"></div>-->
-    <!--<router-link class="aside-nav__sub-item sub_item" :to="{path:'/audio'}">-->
-    <!--  <div class="aside-nav__sub-item-body">-->
-    <!--    <p class="aside-nav__sub-item-text inline-block-v-middle text-elip" title="回收站">-->
-    <!--      音乐播放-->
-    <!--    </p>-->
-    <!--  </div>-->
-    <!--</router-link>-->
-    <!--<div class="aside-nav__divider"></div>-->
-
     <StorageBar v-if="type==='user'"></StorageBar>
   </div>
 </template>
@@ -324,13 +281,20 @@ export default {
         },
         {
           id: 9,
+          name: '在线笔记',
+          iconClass: 'icon-work-copy',
+          path: 'notes',
+          show: true
+        },
+        {
+          id: 10,
           name: '工具箱',
           iconClass: 'icon-gongju',
           path: 'tools',
           show: true
         },
         {
-          id: 10,
+          id: 11,
           name: '用户中心',
           iconClass: 'icon-yonghuzhongxin',
           path: 'user',
@@ -374,16 +338,7 @@ export default {
       ]
     }
   },
-  watch: {
-    // showEditMenu (value) {
-    //   console.log(value)
-    //   if (!value == true) {
-    //     document.body.addEventListener('click', this.close)
-    //   } else {
-    //     document.body.removeEventListener('click', this.close)
-    //   }
-    // }
-  },
+  watch: {},
   computed: {},
   created () {
     if (this.type === 'user') {
@@ -410,7 +365,6 @@ export default {
       this.showEditMenu = false
     },
     selectTab (index, e) {
-      console.log(index)
     },
     showEdit () {
       if (this.showEditMenu == true) {
@@ -532,8 +486,8 @@ export default {
       .sub_item {
         font-size: 12px;
         font-weight: 400;
-        height: 40px;
-        line-height: 40px;
+        height: 36px;
+        line-height: 36px;
         width: 100%;
         display: inline-block;
         //margin-left: 12px;
@@ -563,8 +517,8 @@ export default {
   }
 
   .aside-nav__sub-item {
-    height: 40px;
-    line-height: 40px;
+    height: 32px;
+    line-height: 32px;
     width: 100%;
     display: inline-block;
     width: 177px;

@@ -1340,6 +1340,7 @@ export default {
         title: '重命名文件',
         showType: 3,
         file: this.fileList[this.selectFileIndex],
+        originName: this.fileList[this.selectFileIndex].fileName,
         operation: 'rename'
       })
         .then((res) => {

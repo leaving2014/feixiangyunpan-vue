@@ -72,11 +72,13 @@
           <div class="prop">
             最后修改:
             {{
-              this.$route.path == '/share' ? this.fileList[selectFileIndex].updateTime : this.fileList[selectFileIndex].fileUpdateTime
+              this.$route.path == '/share' ? this.fileList[selectFileIndex].updateTime :
+                this.fileList[selectFileIndex].fileUpdateTime
             }}
           </div>
           <div class="prop" v-if="this.fileList[selectFileIndex].isDir===0">
-            文件格式: {{ this.fileList[selectFileIndex].fileExt !== null ? this.fileList[selectFileIndex].fileExt : '' }}
+            文件格式: {{ this.fileList[selectFileIndex].fileExt !== null ? this.fileList[selectFileIndex].fileExt : ''
+            }}
             <!--{{-->
             <!--  selectFileIndex !== -1 ? '文件格式: ' + `${this.fileList[selectFileIndex].fileExt !== null ? this.fileList[selectFileIndex].fileExt : ''}`-->
             <!--}}-->
@@ -118,7 +120,8 @@
           </div>
           <div class="prop" v-if="this.$route.path.includes('/share')">
             提取码:
-            {{ this.fileList[selectFileIndex].extractionCode !== null ? this.fileList[selectFileIndex].extractionCode : ''
+            {{ this.fileList[selectFileIndex].extractionCode !== null ? this.fileList[selectFileIndex].extractionCode :
+            ''
             }}
           </div>
         </div>
@@ -183,13 +186,13 @@ export default {
     async getFileList (path, isRefresh) {
       const data = {
         filePath: path,
-        refresh: !!isRefresh
+        refresh: !!isRefresh,
+        userId: this.getCookies('uid')
         // filePath: this.filePath,
         // currentPage: this.pageData.currentPage,
         // pageCount: this.pageData.pageCount
       }
       getFileListByPath(data).then((res) => {
-        console.log(JSON.parse(JSON.stringify(res.data.list)))
         if (res.code === 0) {
           this.currentFolderList = res.data.list
           this.sortFileList.length = 0

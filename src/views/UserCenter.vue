@@ -198,7 +198,6 @@ export default {
   watch: {
     editUserInfo: {
       handler: function(val) { // 此处注意，handler函数不能为箭头函数，this会取上下文，而不是组件里的this,此外，深度监听，必须为handler函数名，否则会无效果
-        console.log(val)
         var flag = new RegExp('[`~!@#$^&*()=|{}\':;\',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“\'。，、？ ]')
         // 判断文件名是否包含特殊字符
         if (flag.test(val.userName || val.nickName)) {

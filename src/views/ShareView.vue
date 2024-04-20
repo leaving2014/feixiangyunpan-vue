@@ -330,7 +330,6 @@ export default {
       }
     },
     selectFileIdList (newVal) {
-      console.log(newVal)
       this.chipInState = newVal
     }
   },
@@ -349,7 +348,6 @@ export default {
     // 被选中的文件列表
     // eslint-disable-next-line vue/no-dupe-keys
     selectedFiles () {
-      console.log(this.$store.state.selectFileIdList)
       return this.$store.state.selectFileIdList
     },
     calcExpiredTime () {
@@ -385,11 +383,8 @@ export default {
   },
   created () {
     this.batchNum = this.$route.params.shareBatchNum
-    console.log('this.batchNum', this.batchNum)
     this.getShareInfo()
-    if (this.$route.query.extractionCode == undefined) {
-      console.log('没有提取码,需要验证')
-    } else {
+    if (this.$route.query.extractionCode) {
       this.extractionCode = this.$route.query.extractionCode
       console.log(
         'this.$route.query.extractionCode == ',
@@ -479,14 +474,12 @@ export default {
         visible: true
       })
         .then((p) => {
-          console.log('p', p.filePath)
           const data = {
             batchNum: this.batchNum,
             filePath: p.filePath,
             files: this.selectedFiles
           }
           saveShareFile(data).then((res) => {
-            console.log('res', res)
             if (res.code === 0) {
               this.$store.commit('updateUserStorage', res.data.userStorage)
               this.$toast.success('保存成功')
@@ -505,7 +498,6 @@ export default {
         batchNum: this.batchNum,
         extractionCode: this.extractionCode
       }).then((res) => {
-        console.log(res)
         if (res.code === 0) {
           this.auth = true
           this.fileList.length = 0

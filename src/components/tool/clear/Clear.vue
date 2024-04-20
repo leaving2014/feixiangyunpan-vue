@@ -37,11 +37,8 @@ export default {
       getClearFile({
         fileSize: 10
       }).then(res => {
-        console.log(res)
         if (res.code === 0) {
           this.fileList = res.data.list
-          console.log(res.data.list)
-          // this.$toast.success(res.msg)
         } else {
           this.$toast.error(res.msg)
         }

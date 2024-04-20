@@ -294,15 +294,11 @@ export default {
   },
   watch: {
     '$route.query.filePath': function(newVal, oldVal) {
-      console.log(newVal, oldVal)
-      console.log(this.fileList)
       var data
       // 后退操作时获取文件列表
       if (newVal.length < oldVal.length) {
         // 当后退到根路径时,获取根路径下的文件列表
         if (newVal === '/') {
-          console.log('获取根路径下的文件列表' + newVal)
-          console.log(this.$route.query.batchNum)
           Bus.$emit('getShare', true)
           data = {
             batchNum: this.$route.query.batchNum
@@ -314,7 +310,6 @@ export default {
           })
         } else {
           var file = this.fileList.filter(item => item.filePath === oldVal)
-          console.log(file)
           data = {
             path: newVal,
             userId: this.shareUser.id
@@ -349,7 +344,6 @@ export default {
         }
         i++
       }
-      console.log(this.selectFileList)
       this.$store.commit('updateSelectFileIdList', this.selectFileIdList)
     }
   },
@@ -360,13 +354,11 @@ export default {
   mounted () {
     this.sortFileList.length = 0
     this.sortFileList = this.fileList
-    console.log(this.sortFileList)
 
-    if (this.usePage == 'tools') {
+    if (this.usePage == 'tools' || this.usePage == 'share') {
       this.sortFileList = this.fileList.sort(this.compare('isDir', -1))
-      console.log('当前是tools页面使用')
-    } else if (this.usePage == 'share') {
-      this.sortFileList = this.fileList.sort(this.compare('isDir', -1))
+    } else if (this.usePage == 'notes') {
+
     }
     this.init()
   },
@@ -378,11 +370,6 @@ export default {
     },
     // 打开右键菜单
     openMenu (e, item, index) {
-      // if (item == undefined) {
-      //   this.$store.commit('updateSelectFileCount', 0)
-      //   this.showMenu = true
-      // }
-
       this.e = e
       this.selectFileIndex = index
       this.item = this.fileList[index]
@@ -390,10 +377,6 @@ export default {
       } else {
         this.init()
       }
-      // console.log(e.target.closest('.grid-list__item').getAttribute('index'))
-      // this.menuFileIndex = e.target
-      //   .closest('.grid-list__item')
-      //   .getAttribute('index')
       this.menuLeft = e.screenX
       this.menuTop = e.screenY - 110
       if (this.getSelectedFileIndex(this.selectedFile, index) === index) {
@@ -451,7 +434,6 @@ export default {
       this.showMenu = false
       this.showCreateFolder = false
     },
-
     showContentMenuType (index, e) {
       if (this.selectedFile[index] === true) {
       } else {
@@ -471,24 +453,8 @@ export default {
       if (this.selectedFile.length === 0) {
         this.selectedFileCount = 0
       }
-
-      // console.log('右键点击文件', index)
-      // // const _this = this
-      // this.selectFileIndex = index
-      // this.item = this.fileList[index]
-      // if (this.selectedFile[index] === true) {
-      // } else {
-      //   // this.init()
-      // }
-      // if (this.getSelectedFileIndex(this.selectedFile, index) === index) {
-      //   this.selectFile(index)
-      // } else if (this.selectedFileCount === 0) {
-      //   this.selectFile(index)
-      // }
-      // return this.$store.state.selectFileCount
     },
     clickActions: function(index, item, e) {
-      console.log('==index:' + index + '==fileName:' + item.fileName)
       if (item.isDir === 1) {
         if (this.$route.path.includes('/s/')) {
           this.openShareFolder(index, item.fileName)
@@ -513,7 +479,6 @@ export default {
     },
     // 选择文件
     selectFile (index) {
-      console.log('选中文件index:' + index)
       if (this.selectAllFiles === true) {
         this.selectAllFiles = false
       }
@@ -543,51 +508,6 @@ export default {
       } else {
         this.selectFileIndex = -1
       }
-
-      // console.log('点击选中文件index=======' + index)
-      // this.selectFileIndex = index
-      // // e.stopImmediatePropagation()
-      // if (this.selectAllFiles === true) {
-      //   this.selectAllFiles = false
-      // }
-      // if (this.selectedFile[index] == false) {
-      //   this.selectedFileCount += 1
-      //   this.selectedFile[index] = true
-      //   this.$store.commit('updateSelectFileCount', this.selectedFileCount)
-      //   // 判断是否所有都选则
-      //   if (
-      //     this.selectedFile.filter((file) => file == true).length ===
-      //     this.fileList.length
-      //   ) {
-      //     this.selectAllFiles = true
-      //   } else {
-      //     this.selectAllFiles = false
-      //   }
-      // } else {
-      //   this.selectedFileCount -= 1
-      //   this.selectedFile[index] = false
-      //   this.$store.commit('updateSelectFileCount', this.selectedFileCount)
-      // }
-      //
-      // if (this.selectedFileCount === 1) {
-      //   this.$store.commit('updateSelectFileIndex', index)
-      //   // 选中文件为1 且路径为空时
-      //   if (this.$route.query.filePath === undefined) {
-      //     this.selectFullPath = '/' + this.fileList[index].fileName
-      //     this.$store.commit('updateSelectFullPath', this.selectFullPath)
-      //   } else {
-      //     // 路径不为空时
-      //     this.selectFullPath =
-      //       this.$route.query.filePath + this.fileList[index].fileName
-      //     this.$store.commit('updateSelectFullPath', this.selectFullPath)
-      //   }
-      //   this.selectFileIndex = this.getSelectedFileIndex(
-      //     this.selectedFile,
-      //     true
-      //   )
-      // } else {
-      //   this.selectFileIndex = -1
-      // }
     },
     // 获取选中文件索引
     getSelectedFileIndex (arrays, obj) {
@@ -634,7 +554,6 @@ export default {
       }
       this.fullPath = prePath + path
       this.currentPath = path
-      console.log('点击打开index:' + index + '===path===' + path)
       const data = {
         // filePath: this.fileList[index].filePath,
         fileId: this.fileList[index].id,
@@ -648,14 +567,6 @@ export default {
           this.$toast.error(res.msg)
         }
       })
-      // console.log('fullPath:' + this.fullPath)
-      // console.log('currentPath:' + this.currentPath)
-      // this.fullPath = this.$route.query.filePath + '/' + path
-      // if (this.$route.query.filePath === undefined) {
-      //   this.fullPath = '/' + path
-      // } else {
-      //   this.fullPath = this.$route.query.filePath + '/' + path
-      // }
       this.$router.push({
         query: {
           filePath: this.fullPath

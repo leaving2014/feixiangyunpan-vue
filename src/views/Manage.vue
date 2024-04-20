@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import TabBar from '@/components/common/TabBar'
+import TabBar from '@/components/common/AsideTabBar.vue'
 import { getUserInfo, logout, uploadAvatar } from '@/request/user'
 
 export default {
@@ -154,7 +154,6 @@ export default {
     },
     getUserInfo () {
       getUserInfo().then((res) => {
-        console.log('manage获取用户信息', res)
         if (res.code === 0) {
           if (res.data.userInfo.role === 2 || res.data.userInfo.role === 3) {
             localStorage.setItem('userInfo', JSON.stringify(res.data.userInfo))
@@ -171,8 +170,6 @@ export default {
     },
     modifyAvatar () {
       this.$refs.avatarInput.dispatchEvent(new MouseEvent('click'))
-      console.log('modifyAvatar')
-      // this.$refs.avatar.click()
     },
     uploadAvatar (e) {
       const file = e.target.files[0]
@@ -184,7 +181,6 @@ export default {
     },
     changeAvatar (e) {
       const file = e.target.files[0]
-      console.log(file)
       // 限制上传图片类型
       if (!/\.(jpg|jpeg|png|JPG|PNG)$/.test(e.target.value)) {
         this.$message({
